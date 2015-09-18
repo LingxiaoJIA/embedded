@@ -1,0 +1,19 @@
+prune functions and variables and only remain the useful functions for the edge functions listed below
+:
+void get_image(filename,in,x_size,y_size)
+void setup_brightness_lut(bp,thresh,form)
+susan_edges(in,r,mid,bp,max_no,x_size,y_size)
+susan_thin(r,mid,x_size,y_size)
+edge_draw(in,mid,x_size,y_size,drawing_mode)
+put_image(filename,in,x_size,y_size)
+
+change the malloc functions into static arrays, and change parameter of functions that uses these pointers.
+:
+These two were originally malloc in the main():
+int r[x_size * y_size * sizeof(int)];--->int r[x_size * y_size * sizeof(int)];
+uchar mid[x_size*y_size];--->uchar mid[x_size*y_size];
+THESE TWO were allocated in input_image() and lut():
+declare in main as: uchar  *in;--->uchar in[x_size * y_size];
+declare in main as: uchar  *bp;--->uchar bp[516];
+
+Set the size fixed to 76*95, and prune the parameters and ONLY left necessary for communicate: delete x_size, y_size, and hardcode the in the functions.
