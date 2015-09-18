@@ -204,7 +204,7 @@ float temp;
 /* {{{ edge_draw(in,corner_list,drawing_mode) */
 
 edge_draw(in,mid,drawing_mode)
-  uchar *in, *mid;
+  uchar in[], mid[];
   int  drawing_mode;
 {
 int   i;
