@@ -7,7 +7,7 @@
 
 void put_image(
     char filename[100], 
-    unsigned char in[95][76],
+    unsigned char in[],
     int x_size,
     int y_size);
 

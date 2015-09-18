@@ -22,6 +22,10 @@ typedef float      TOTAL_TYPE; /* for my PowerPC accelerator only */
 #include <math.h>
 #include <sys/file.h>    /* may want to remove this line */
 #include <malloc.h>      /* may want to remove this line */
+
+#include "get_image.h"
+#include "put_image.h"
+
 #define  exit_error(IFB,IFC) { fprintf(stderr,IFB,IFC); exit(0); }
 #define  FTOI(a) ( (a) < 0 ? ((int)(a-0.5)) : ((int)(a+0.5)) )
 typedef  unsigned char uchar;
@@ -52,47 +56,7 @@ usage()
   exit(0);
 }
 
-
-
 /* }}} */
-/* {{{ get_image(filename,in,x_size,y_size) */
-
-/* {{{ int getint(fp) derived from XV */
-
-
-/*CW fd is a pointer of the file???*/
-int getint(fd)
-  FILE *fd;
-{
-  int c, i;
-  char dummy[10000];
-
-  c = getc(fd);
-  while (1) /* find next integer */
-  {
-    if (c=='#')    /* if we're at a comment, read to end of line */
-      fgets(dummy,9000,fd);
-    if (c==EOF)
-      exit_error("Image %s not binary PGM.\n","is");
-    if (c>='0' && c<='9')
-      break;   /* found what we were looking for */
-    c = getc(fd);/*continue here*/
-  }
-
-  /* we're at the start of a number, continue until we hit a non-number */
-  i = 0;
-  while (1) {
-    i = (i*10) + (c - '0');/*change the i for next detection*/
-    c = getc(fd);
-    if (c==EOF) return (i);
-    if (c<'0' || c>'9') break;/*hit a non-number here*/
-  }
-
-  return (i);
-}
-
-/* }}} */
-
 
 /* {{{ setup_brightness_lut(bp,thresh,form) */
 //uchar  *bp;--> uchar bp[1];,,,, &bp -> bpPtrArray[1]
@@ -671,7 +635,7 @@ uchar mid[x_size*y_size];
 
 
   /*CW get the image*/
-  get_image(argv[1], &in, x_size, y_size);
+  get_image(argv[1], in, x_size, y_size);
 
 
   while (argindex < argc)
@@ -764,3 +728,4 @@ uchar mid[x_size*y_size];
 }
 
 /* }}} */
+
