@@ -93,80 +93,7 @@ int getint(fd)
 
 /* }}} */
 
-/*process to get the image*/
-void get_image(filename,in)
-  char           filename[200];
-  //unsigned char  **in;
-  unsigned char in[];
 
-{
-FILE  *fd;
-char header [100];
-int  tmp;
-
-int x=76;
-int y=95;
-int *x_size = &x;
-int *y_size = &y;
-
-#ifdef FOPENB
-  if ((fd=fopen(filename,"rb")) == NULL)
-#else
-  if ((fd=fopen(filename,"r")) == NULL)
-#endif
-    exit_error("Can't input image %s.\n",filename);
-
-  /* {{{ read header */
-
-  header[0]=fgetc(fd);
-  header[1]=fgetc(fd);
-  if(!(header[0]=='P' && header[1]=='5'))
-    exit_error("Image %s does not have binary PGM header.\n",filename);
-
-  *x_size = getint(fd);
-  *y_size = getint(fd);
-  tmp = getint(fd);
-
-/* }}} */
-
-  //*in = (uchar *) malloc(*x_size * *y_size);
-
-  if (fread(in,1,*x_size * *y_size,fd) == 0)
-    exit_error("Image %s is wrong size.\n",filename);
-
-  fclose(fd);
-}
-
-/* }}} */
-/* {{{ put_image(filename,in,x_size,y_size) */
-/*store the image to a file*/
-put_image(filename,in,x_size,y_size)
-  char filename [100];
-  char in[];
-  int  x_size,
-       y_size;
-{
-FILE  *fd;
-
-#ifdef FOPENB
-  if ((fd=fopen(filename,"wb")) == NULL) 
-#else
-  if ((fd=fopen(filename,"w")) == NULL) 
-#endif
-    exit_error("Can't output image%s.\n",filename);
-
-  fprintf(fd,"P5\n");
-  fprintf(fd,"%d %d\n",x_size,y_size);
-  fprintf(fd,"255\n");
-  
-  if (fwrite(in,x_size*y_size,1,fd) != 1)
-    exit_error("Can't write image %s.\n",filename);
-
-  fclose(fd);
-}
-
-
-/* }}} */
 /* {{{ setup_brightness_lut(bp,thresh,form) */
 //uchar  *bp;--> uchar bp[1];,,,, &bp -> bpPtrArray[1]
 void setup_brightness_lut(bp,thresh,form)
@@ -744,7 +671,7 @@ uchar mid[x_size*y_size];
 
 
   /*CW get the image*/
-  get_image(argv[1],&in);
+  get_image(argv[1], &in, x_size, y_size);
 
 
   while (argindex < argc)

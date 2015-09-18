@@ -47,7 +47,7 @@ int getint(fd)
 
 void get_image(filename,in,x_size,y_size)
   char           filename[200];
-  unsigned char  in[95][76];
+  unsigned char  in[];
   int            x_size, y_size;
 {
 FILE  *fd;
@@ -74,7 +74,7 @@ int  tmp;
 
 /* }}} */
 
-  if (fread(*in, 1, x_size * y_size, fd) == 0)
+  if (fread(in, 1, x_size * y_size, fd) == 0)
     exit_error("Image %s is wrong size.\n", filename);
 
   fclose(fd);

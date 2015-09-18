@@ -13,7 +13,7 @@
 
 put_image(filename,in,x_size,y_size)
   char          filename [100];
-  unsigned char in[95][76];
+  unsigned char in[];
   int           x_size, y_size;
 {
 FILE  *fd;
@@ -29,7 +29,7 @@ FILE  *fd;
   fprintf(fd,"%d %d\n", x_size, y_size);
   fprintf(fd,"255\n");
   
-  if (fwrite(*in, x_size*y_size, 1, fd) != 1)
+  if (fwrite(in, x_size*y_size, 1, fd) != 1)
     exit_error("Can't write image %s.\n",filename);
 
   fclose(fd);
