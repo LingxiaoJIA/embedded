@@ -1,3 +1,14 @@
+/**********************************************************************
+ *  File Name:   setup_brightness_lut.c
+ *  Author:      tengchieh
+ *  Mail:        tengchieh@utexas.edu
+ *  Create Time: 2015 Sep 18 05:52:05 PM
+ **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+typedef  unsigned char uchar;
+
 void setup_brightness_lut(bp,thresh,form)
   uchar bp[];
   int   thresh, form;

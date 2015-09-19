@@ -1,4 +1,8 @@
-susan_thin(r,mid)
+#include <stdlib.h>
+#include <stdio.h>
+typedef  unsigned char uchar;
+
+void susan_thin(r,mid)
   uchar mid[];
   int   r[];
 {
