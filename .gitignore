@@ -37,4 +37,5 @@
 # tar ball
 *.tar.gz
 *.bak
-test*
+*.~
+

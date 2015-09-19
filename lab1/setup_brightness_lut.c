@@ -16,7 +16,7 @@ void setup_brightness_lut(bp,thresh,form)
 int   k;
 float temp;
 
-//printf('addr of bpptrarray = %d\n',bp);  
+//printf('addr of bpptrarray = %d\n',bp);
 
 
   //*bp=(unsigned char *)malloc(516);

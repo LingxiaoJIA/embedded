@@ -157,7 +157,7 @@ uchar mid[x_size*y_size];
 	    exit(0);}
 	  bt=atoi(argv[argindex]);
 	  break;
-      }	    
+      }
       else
         usage();
     argindex++;
@@ -167,7 +167,7 @@ uchar mid[x_size*y_size];
 
   if ( (principle==1) && (mode==0) )
     mode=1;
-/*  
+/*
   printf("principle%d\n",principle);
   printf("%d\n",principle);
   printf("%d\n",principle);

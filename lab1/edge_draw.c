@@ -23,7 +23,7 @@ int x_size = 76, y_size = 95;
     midp=mid;
     for (i=0; i<x_size*y_size; i++)
     {
-      if (*midp<8) 
+      if (*midp<8)
       {
         inp = in + (midp - mid) - x_size - 1;
         *inp++=255; *inp++=255; *inp=255; inp+=x_size-2;
@@ -38,7 +38,7 @@ int x_size = 76, y_size = 95;
   midp=mid;
   for (i=0; i<x_size*y_size; i++)
   {
-    if (*midp<8) 
+    if (*midp<8)
       *(in + (midp - mid)) = 0;
     midp++;
   }

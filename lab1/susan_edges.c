@@ -35,7 +35,7 @@ int y_size = 95;
       n+=*(cp-*p++);
       n+=*(cp-*p++);
       n+=*(cp-*p);
-      p+=x_size-3; 
+      p+=x_size-3;
 
       n+=*(cp-*p++);
       n+=*(cp-*p++);
@@ -103,15 +103,15 @@ int y_size = 95;
           c=*(cp-*p++);x-=c;y-=3*c;
           c=*(cp-*p++);y-=3*c;
           c=*(cp-*p);x+=c;y-=3*c;
-          p+=x_size-3; 
-    
+          p+=x_size-3;
+
           c=*(cp-*p++);x-=2*c;y-=2*c;
           c=*(cp-*p++);x-=c;y-=2*c;
           c=*(cp-*p++);y-=2*c;
           c=*(cp-*p++);x+=c;y-=2*c;
           c=*(cp-*p);x+=2*c;y-=2*c;
           p+=x_size-5;
-    
+
           c=*(cp-*p++);x-=3*c;y-=c;
           c=*(cp-*p++);x-=2*c;y-=c;
           c=*(cp-*p++);x-=c;y-=c;
@@ -129,7 +129,7 @@ int y_size = 95;
           c=*(cp-*p++);x+=2*c;
           c=*(cp-*p);x+=3*c;
           p+=x_size-6;
-    
+
           c=*(cp-*p++);x-=3*c;y+=c;
           c=*(cp-*p++);x-=2*c;y+=c;
           c=*(cp-*p++);x-=c;y+=c;
@@ -171,11 +171,11 @@ int y_size = 95;
           else
             do_symmetry=1;
         }
-        else 
+        else
           do_symmetry=1;
 
         if (do_symmetry==1)
-	{ 
+	{
           p=in + (i-3)*x_size + j - 1;
           x=0; y=0; w=0;
 
@@ -186,15 +186,15 @@ int y_size = 95;
           c=*(cp-*p++);x+=c;y+=9*c;w+=3*c;
           c=*(cp-*p++);y+=9*c;
           c=*(cp-*p);x+=c;y+=9*c;w-=3*c;
-          p+=x_size-3; 
-  
+          p+=x_size-3;
+
           c=*(cp-*p++);x+=4*c;y+=4*c;w+=4*c;
           c=*(cp-*p++);x+=c;y+=4*c;w+=2*c;
           c=*(cp-*p++);y+=4*c;
           c=*(cp-*p++);x+=c;y+=4*c;w-=2*c;
           c=*(cp-*p);x+=4*c;y+=4*c;w-=4*c;
           p+=x_size-5;
-    
+
           c=*(cp-*p++);x+=9*c;y+=c;w+=3*c;
           c=*(cp-*p++);x+=4*c;y+=c;w+=2*c;
           c=*(cp-*p++);x+=c;y+=c;w+=c;
@@ -212,7 +212,7 @@ int y_size = 95;
           c=*(cp-*p++);x+=4*c;
           c=*(cp-*p);x+=9*c;
           p+=x_size-6;
-    
+
           c=*(cp-*p++);x+=9*c;y+=c;w-=3*c;
           c=*(cp-*p++);x+=4*c;y+=c;w-=2*c;
           c=*(cp-*p++);x+=c;y+=c;w-=c;
@@ -221,7 +221,7 @@ int y_size = 95;
           c=*(cp-*p++);x+=4*c;y+=c;w+=2*c;
           c=*(cp-*p);x+=9*c;y+=c;w+=3*c;
           p+=x_size-5;
- 
+
           c=*(cp-*p++);x+=4*c;y+=4*c;w-=4*c;
           c=*(cp-*p++);x+=c;y+=4*c;w-=2*c;
           c=*(cp-*p++);y+=4*c;
@@ -243,7 +243,7 @@ int y_size = 95;
                                 else { a=1; b=1; }}}
           if ( (m > r[(i+a)*x_size+j+b]) && (m >= r[(i-a)*x_size+j-b]) &&
                (m > r[(i+(2*a))*x_size+j+(2*b)]) && (m >= r[(i-(2*a))*x_size+j-(2*b)]) )
-            mid[i*x_size+j] = 2;	
+            mid[i*x_size+j] = 2;
         }
       }
     }

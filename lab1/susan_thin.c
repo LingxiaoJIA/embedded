@@ -57,21 +57,21 @@ uchar *mp;
           l[3]=r[(i  )*x_size+j-1]; l[4]=0;                 l[5]=r[(i  )*x_size+j+1];
           l[6]=r[(i+1)*x_size+j-1]; l[7]=r[(i+1)*x_size+j]; l[8]=r[(i+1)*x_size+j+1];
 
-          if (mid[(i-1)*x_size+j-1]<8)        { l[0]=0; l[1]=0; l[3]=0; l[2]*=2; 
+          if (mid[(i-1)*x_size+j-1]<8)        { l[0]=0; l[1]=0; l[3]=0; l[2]*=2;
                                                 l[6]*=2; l[5]*=3; l[7]*=3; l[8]*=4; }
-          else { if (mid[(i-1)*x_size+j]<8)   { l[1]=0; l[0]=0; l[2]=0; l[3]*=2; 
+          else { if (mid[(i-1)*x_size+j]<8)   { l[1]=0; l[0]=0; l[2]=0; l[3]*=2;
                                                 l[5]*=2; l[6]*=3; l[8]*=3; l[7]*=4; }
-          else { if (mid[(i-1)*x_size+j+1]<8) { l[2]=0; l[1]=0; l[5]=0; l[0]*=2; 
+          else { if (mid[(i-1)*x_size+j+1]<8) { l[2]=0; l[1]=0; l[5]=0; l[0]*=2;
                                                 l[8]*=2; l[3]*=3; l[7]*=3; l[6]*=4; }
-          else { if (mid[(i)*x_size+j-1]<8)   { l[3]=0; l[0]=0; l[6]=0; l[1]*=2; 
+          else { if (mid[(i)*x_size+j-1]<8)   { l[3]=0; l[0]=0; l[6]=0; l[1]*=2;
                                                 l[7]*=2; l[2]*=3; l[8]*=3; l[5]*=4; }
-          else { if (mid[(i)*x_size+j+1]<8)   { l[5]=0; l[2]=0; l[8]=0; l[1]*=2; 
+          else { if (mid[(i)*x_size+j+1]<8)   { l[5]=0; l[2]=0; l[8]=0; l[1]*=2;
                                                 l[7]*=2; l[0]*=3; l[6]*=3; l[3]*=4; }
-          else { if (mid[(i+1)*x_size+j-1]<8) { l[6]=0; l[3]=0; l[7]=0; l[0]*=2; 
+          else { if (mid[(i+1)*x_size+j-1]<8) { l[6]=0; l[3]=0; l[7]=0; l[0]*=2;
                                                 l[8]*=2; l[1]*=3; l[5]*=3; l[2]*=4; }
-          else { if (mid[(i+1)*x_size+j]<8)   { l[7]=0; l[6]=0; l[8]=0; l[3]*=2; 
+          else { if (mid[(i+1)*x_size+j]<8)   { l[7]=0; l[6]=0; l[8]=0; l[3]*=2;
                                                 l[5]*=2; l[0]*=3; l[2]*=3; l[1]*=4; }
-          else { if (mid[(i+1)*x_size+j+1]<8) { l[8]=0; l[5]=0; l[7]=0; l[6]*=2; 
+          else { if (mid[(i+1)*x_size+j+1]<8) { l[8]=0; l[5]=0; l[7]=0; l[6]*=2;
                                                 l[2]*=2; l[1]*=3; l[3]*=3; l[0]*=4; } }}}}}}}
 
           m=0;     /* find the highest point */
@@ -110,7 +110,7 @@ uchar *mp;
                 e.g. X O X  CAN  become X X X
                      O X O              O O O
                      O O O              O O O    */
-            if (b00) 
+            if (b00)
 	    {
               if (b02) { x=0; y=-1; }
               else     { x=-1; y=0; }
