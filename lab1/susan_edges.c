@@ -1,4 +1,16 @@
-susan_edges(in,r,mid,bp,max_no)
+/**********************************************************************
+ *  File Name:   susan_edges.c
+ *  Author:      tengchieh
+ *  Mail:        tengchieh@utexas.edu
+ *  Create Time: 2015 Sep 18 11:24:05 AM
+ **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+typedef  unsigned char uchar;
+
+void susan_edges(in,r,mid,bp,max_no)
   uchar *in;
   int   max_no;
   uchar bp[];

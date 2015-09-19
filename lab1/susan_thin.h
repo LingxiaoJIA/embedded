@@ -1,1 +1,1 @@
-susan_thin(int r[], uchar mid[]);
+void susan_thin(int r[], uchar mid[]);

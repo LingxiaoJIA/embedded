@@ -1,3 +1,14 @@
+/**********************************************************************
+ *  File Name:   edge_draw.c
+ *  Author:      tengchieh
+ *  Mail:        tengchieh@utexas.edu
+ *  Create Time: 2015 Sep 18 05:59:15 PM
+ **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+typedef  unsigned char uchar;
+
 edge_draw(in,mid,drawing_mode)
   uchar in[], mid[];
   int  drawing_mode;
