@@ -7,7 +7,7 @@ typedef  unsigned char uchar;
 //
 //
 //dependency between setup_brightness and susan_edges
-behavior SETUP_BRIGHTNESS_LUT(i_tranceiver Port)
+behavior SetupBrightnesLut(i_tranceiver Port)
 {
 	//NEED to use port to receive bp here
 	int   k;
@@ -48,7 +48,7 @@ behavior SETUP_BRIGHTNESS_LUT(i_tranceiver Port)
 //int max_no_edges=2650;
 
 
-behavior SUSAN_EDGES(i_tranceiver Port)
+behavior SusanEdges(i_tranceiver Port)
 {
   float z;
   int   do_symmetry, i, j, m, n, a, b, x, y, w;
@@ -56,7 +56,7 @@ behavior SUSAN_EDGES(i_tranceiver Port)
   int x_size = 76;
   int y_size = 95;
 //receive in, bp
-  uchar in[76 * 95];//use port to receive and store in the in[]
+  uchar input[76 * 95];//use port to receive and store in the in[]
   uchar bp[516];
 
 //initial r and mid, r with all zeros and mid with all 100, and make changes
@@ -70,7 +70,7 @@ behavior SUSAN_EDGES(i_tranceiver Port)
   void main(void)
   {
   //receive in and bp here
-  Port.receive(in,7220);
+  Port.receive(input,7220);
   Port.receive(bp,516);
   memset (mid,100,x_size * y_size);//this is from susan.c main()
 //original
@@ -80,8 +80,8 @@ behavior SUSAN_EDGES(i_tranceiver Port)
     for (j=3;j<x_size-3;j++)
     {
       n=100;
-      p=in + (i-3)*x_size + j - 1;
-      cp=bp+258 + in[i*x_size+j];
+      p=input + (i-3)*x_size + j - 1;
+      cp=bp+258 + input[i*x_size+j];
 
       n+=*(cp-*p++);
       n+=*(cp-*p++);
@@ -144,11 +144,11 @@ behavior SUSAN_EDGES(i_tranceiver Port)
       {
         m=r[i*x_size+j];
         n=max_no - m;
-        cp=bp+258 + in[i*x_size+j];
+        cp=bp+258 + input[i*x_size+j];
 
         if (n>600)
         {
-          p=in + (i-3)*x_size + j - 1;
+          p=input + (i-3)*x_size + j - 1;
           x=0;y=0;
 
           c=*(cp-*p++);x-=c;y-=3*c;
@@ -227,7 +227,7 @@ behavior SUSAN_EDGES(i_tranceiver Port)
 
         if (do_symmetry==1)
 	{ 
-          p=in + (i-3)*x_size + j - 1;
+          p=input + (i-3)*x_size + j - 1;
           x=0; y=0; w=0;
 
           /*   |      \
@@ -299,9 +299,9 @@ behavior SUSAN_EDGES(i_tranceiver Port)
       }
     }	
   //do not need to send bp anymore
-  Port.send(in,);
-  Port.send(mid,);
-  Port.send(r,);
+  Port.send(input,7220);
+  Port.send(mid,7220);
+  Port.send(r,7220*sizeof(int));
   }//void main of behavior
 };
 
@@ -316,38 +316,40 @@ bahavior DETECT_EDGES(i_receiver Portin, i_sender Portout)
 	const unsigned long sizeedges = 7736;//is it ok..?
 	c_queue		c_brightness(sizebrightness);
 	c_queue		c_edges(sizeedges);
-	SETUP_BRIGHTNESS_LUT	setup_brightness_lut(c_brightness);
-	SUSAN_EDGES	susan_edges(c_edges);
+	SetupBrightnessLut	setup_brightness_lut(c_brightness);
+	SusanEdges	susan_edges(c_edges);
 
 
 	//bp is the array that brightness and edges will use	
 	uchar bp[516];
 	//r and mid buffer for edges use, and send to susanThin by Portout
-	uchar in[76 * 95];//use port to receive and store in the in[]
+	uchar input[76 * 95];//use port to receive and store in the in[]
 	int r[76*95]; //mid and r and in will get updated by susan_edges
 	uchar mid[76*95];//in and bp have to be sent to susan_edges
+
+//the r is the only problem
 
 	void main(void)
 	{
 		//receive from SUSAN
-		Portin.receive(in,?????)//receive the whole uchar in[] array here?????
+		Portin.receive(input,7220);//receive the whole uchar in[] array here?????
 		//the process of detectEdges
 		//setup brightness
 		setup_brightness_lut.main();
 		c_brightness.receive(bp,516);//receive all of the bp in one time???
 		//send in and bp for edges use
-		c_edges.send(in,7220);
+		c_edges.send(input,7220);
 		c_edges.send(bp,516);		
 		//edges process
 		susan_edges.main();
 		//update in, r, mid
-		c_edges.receive(in,);//
-		c_edges.receive(r,);//
-		c_edges.receive(mid,);//
+		c_edges.receive(input,7220);//
+		c_edges.receive(mid,7220);//
+		c_edges.receive(r,7220*sizeof(int));//
 		//send to susanThin, need to send mid and r
-		Portout.send(in,);//send the mid and r to SUSAN
-		Portout.send(r,);//send the mid and r to SUSAN
-		Portout.send(mid,);//send the mid and r to SUSAN
+		Portout.send(input,7220);//send the mid and r to SUSAN
+		Portout.send(mid,7220);//send the mid and r to SUSAN
+		Portout.send(r,7220*sizeof(int));//send the mid and r to SUSAN
 	}
 };
 

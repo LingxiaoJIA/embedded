@@ -3,7 +3,7 @@
 import "c_queue";
 
 //receive in, mid
-behavior EDGE_DRAW(i_receiver Portin, i_sender Portout)
+behavior EdgeDraw(i_receiver Portin, i_sender Portout)
 {
 
 void main(void)
@@ -12,11 +12,11 @@ int   i;
 uchar *inp, *midp;
 int x_size = 76, y_size = 95;
 int drawing_mode = 0;
-uchar in[x_size * y_size];
+uchar input[x_size * y_size];
 uchar mid[x_size*y_size];
 
-  Portin.receive(in, );
-  Portin.receive(mid, );
+  Portin.receive(input, 7220);
+  Portin.receive(mid, 7220);
 
   if (drawing_mode==0)
   {
@@ -26,7 +26,7 @@ uchar mid[x_size*y_size];
     {
       if (*midp<8) 
       {
-        inp = in + (midp - mid) - x_size - 1;
+        inp = input + (midp - mid) - x_size - 1;
         *inp++=255; *inp++=255; *inp=255; inp+=x_size-2;
         *inp++=255; *inp++;     *inp=255; inp+=x_size-2;
         *inp++=255; *inp++=255; *inp=255;
@@ -40,11 +40,11 @@ uchar mid[x_size*y_size];
   for (i=0; i<x_size*y_size; i++)
   {
     if (*midp<8) 
-      *(in + (midp - mid)) = 0;
+      *(input + (midp - mid)) = 0;
     midp++;
   }
   //send in out
-  Portout.send(in, );
+  Portout.send(input, 7220);
 }//main
 };
 
