@@ -49,7 +49,7 @@ behavior SetupBrightnessLut(i_tranceiver Port)
 //int max_no_edges=2650;
 
 
-behavior SusanEdges(i_tranceiver Port)
+behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
 {
   float z;
   int   do_symmetry, i, j, m, n, a, b, x, y, w;
@@ -69,8 +69,8 @@ behavior SusanEdges(i_tranceiver Port)
   void main(void)
   {
   //receive in and bp here
-  Port.receive(input,7220);
-  Port.receive(bp,516);
+  FromBrightness.receive(input,7220);
+  FromBrightness.receive(bp,516);
   memset (mid,100,x_size * y_size);//this is from susan.c main()
 //original
   memset (r,0,x_size * y_size * sizeof(int));
@@ -298,9 +298,9 @@ behavior SusanEdges(i_tranceiver Port)
       }
     }	
   //do not need to send bp anymore
-  Port.send(input,7220);
-  Port.send(mid,7220);
-  Port.send(r,7220*sizeof(int));
+  ToThin.send(input,7220);
+  ToThin.send(mid,7220);
+  ToThin.send(r,7220*sizeof(int));
   }//void main of behavior
 };
 
@@ -312,11 +312,11 @@ behavior DetectEdges(i_receiver Portin, i_sender Portout)
 {
 	//make port for buffer and communication
 	const unsigned long sizebrightness = 516;//is it ok..?
-	const unsigned long sizeedges = 7736;//is it ok..?
+	const unsigned long sizeedges = 43320;//is it ok..?
 	c_queue		c_brightness(sizebrightness);
 	c_queue		c_edges(sizeedges);
 	SetupBrightnessLut	setup_brightness_lut(c_brightness);
-	SusanEdges	susan_edges(c_edges);
+	SusanEdges	susan_edges(c_edges, Portout);
 
 
 	//bp is the array that brightness and edges will use	
@@ -342,13 +342,6 @@ behavior DetectEdges(i_receiver Portin, i_sender Portout)
 		//edges process
 		susan_edges.main();
 		//update in, r, mid
-		c_edges.receive(input,7220);//
-		c_edges.receive(mid,7220);//
-		c_edges.receive(r,7220*sizeof(int));//
-		//send to susanThin, need to send mid and r
-		Portout.send(input,7220);//send the mid and r to SUSAN
-		Portout.send(mid,7220);//send the mid and r to SUSAN
-		Portout.send(r,7220*sizeof(int));//send the mid and r to SUSAN
 	}
 };
 
