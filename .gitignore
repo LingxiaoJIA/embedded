@@ -36,5 +36,5 @@
 
 # tar ball
 *.tar.gz
-*.~
+*~
 
