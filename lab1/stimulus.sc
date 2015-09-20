@@ -14,7 +14,7 @@ import "c_handshake";
   exit(0); \
 }
 
-behavior Stimulus(i_sender Start, out i_sender InputBuffer)
+behavior Stimulus(i_sender Start, i_sender InputBuffer)
 {
 
   /* {{{ get_image(filename,input,x_size,y_size) */

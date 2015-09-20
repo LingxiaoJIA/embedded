@@ -6,17 +6,15 @@ import "c_queue";
 //const unsigned long SIZE = 1;
 
 behavior Monitor(
-  in char OUTFILE[100],
   i_receiver Port)
 {
-char filename [100];
+char filename [100] = "output_edge.pgm";
 FILE  *fd;
 unsigned char input[7220];
 int x_size = 76, y_size = 95;
 
   void main(void)
   {
-    filename=OUTFILE;
     #ifdef FOPENB
       if ((fd=fopen(filename,"wb")) == NULL) 
     #else
