@@ -5,7 +5,7 @@ import "c_queue";
 //receive r, mid
 //send mid
 
-Behavior SUSAN_THIN(i_receiver Portin,i_sender Portout)
+Behavior SusanThin(i_receiver Portin,i_sender Portout)
 {
 void main void
 {
@@ -23,8 +23,9 @@ uchar mid[76*95];
 uchar *mp;
 
 //receive the r and mid
-  Portin.receive(r, );//implementation
-  Portin.receive(mid, );//implementation
+
+  Portin.receive(mid, 7220);//implementation
+  Portin.receive(r, 7220*sizeof(int));//implementation
 
   for (i=4;i<y_size-4;i++)
     for (j=4;j<x_size-4;j++)
@@ -221,6 +222,6 @@ uchar *mp;
 /* }}} */
       }
   //send mid out
-  Portout.send(mid, );
+  Portout.send(mid, 7220);
 }//main
 };
