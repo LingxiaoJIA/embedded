@@ -7,7 +7,7 @@ typedef  unsigned char uchar;
 //
 //
 //dependency between setup_brightness and susan_edges
-behavior SetupBrightnesLut(i_tranceiver Port)
+behavior SetupBrightnessLut(i_tranceiver Port)
 {
 	//NEED to use port to receive bp here
 	int   k;
