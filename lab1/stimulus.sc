@@ -17,7 +17,7 @@ import "c_handshake";
 behavior Stimulus(i_sender Start, out i_sender ImageBuffer)
 {
 
-  /* {{{ get_image(filename,in,x_size,y_size) */
+  /* {{{ get_image(filename,input,x_size,y_size) */
 
   /* {{{ int getint(fp) derived from XV */
 
@@ -55,7 +55,7 @@ behavior Stimulus(i_sender Start, out i_sender ImageBuffer)
 
   void main(void) {
   char  filename[200] = "input_small.pgm";
-  unsigned char in[76*95]
+  unsigned char input[76*95]
   int x_size, y_size;
   FILE  *fd;
   char  header[100];
@@ -77,11 +77,11 @@ behavior Stimulus(i_sender Start, out i_sender ImageBuffer)
 
   /* }}} */
 
-    if (fread(in, 1, x_size * y_size, fd) == 0)
+    if (fread(input, 1, x_size * y_size, fd) == 0)
       exit_error("Image %s is wrong size.\n", filename);
 
     fclose(fd);
-    ImageBuffer.send(in, 7220ul); // 76 * 95
+    ImageBuffer.send(input, 7220ul); // 76 * 95
   }
 
   /* }}} */
