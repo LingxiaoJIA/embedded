@@ -34,7 +34,7 @@ OUTFILE =  output_edge.pgm
 all:	$(TARGETS)
 
 test:
-	./$$TARGETS	
+	./susan_edge_detector
 	$(CMP) $(OUTFILE) $(GOLDFILE)
 
 clean:
