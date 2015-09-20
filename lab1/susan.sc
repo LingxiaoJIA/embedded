@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 import "c_queue";
+import "detect_edges";
+import "susan_thin";
+import "edge_draw";
+import "c_handshake";
 
+typedef  unsigned char uchar;
 
-behavior Susan(i_receiver start, i_receiver Port_stimulus, i_sender Port_monitor)
+behavior Susan(i_receive start, i_receiver Port_stimulus, i_sender Port_monitor)
 {
 	//the size of port_stimulus should be 7220
 	const unsigned long sizeEdgesout = 43320 ;//is it ok..?
@@ -22,7 +27,7 @@ behavior Susan(i_receiver start, i_receiver Port_stimulus, i_sender Port_monitor
 	c_queue		c_Drawin(sizeDrawin);
 
 	DetectEdges detect_edges(Port_stimulus, c_Edgesout);
-	SuanThin susan_thin(c_Thinin, c_Thinout);
+	SusanThin susan_thin(c_Thinin, c_Thinout);
 	EdgeDraw edge_draw(c_Drawin, Port_monitor);
 
 	
@@ -52,5 +57,31 @@ behavior Susan(i_receiver start, i_receiver Port_stimulus, i_sender Port_monitor
 	}
 };
 
+/*
+behavior Main()
+{
+	uchar input[7220];
+	const unsigned long stimulusSize = 7220;
+	const unsigned long monitorSize = 7220;
+	uchar output[7220];
+
+	c_queue		c1(stimulusSize);
+	c_handshake	c2;
+	c_queue		c3(monitorSize);
+	Susan susan(c2,c1,c3);
+
+	int main(void)
+	{
+		c1.send(input,7220);
+		c2.send();
+		
+		susan.main();
+		
+		c3.receive(output,7220);
+
+		return(0);
+	}
+};
+*/
 
 
