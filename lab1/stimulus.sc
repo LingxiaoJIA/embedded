@@ -5,6 +5,7 @@
  *  Create Time: 2015 Sep 20 09:54:12 AM
  **********************************************************************/
 
+#include <stdlib.h>
 #include <stdio.h>
 import "c_queue";
 import "c_handshake";
@@ -14,15 +15,14 @@ import "c_handshake";
   exit(0); \
 }
 
-behavior Stimulus(i_sender Start, i_sender InputBuffer)
+behavior Stimulus(i_send Start, i_sender InputBuffer)
 {
 
   /* {{{ get_image(filename,input,x_size,y_size) */
 
   /* {{{ int getint(fp) derived from XV */
 
-  int getint(fd)
-    FILE *fd;
+  int getint(FILE *fd)
   {
     int c, i;
     char dummy[10000];
@@ -55,7 +55,7 @@ behavior Stimulus(i_sender Start, i_sender InputBuffer)
 
   void main(void) {
   char  filename[200] = "input_small.pgm";
-  unsigned char input[76*95]
+  unsigned char input[76*95];
   int x_size, y_size;
   FILE  *fd;
   char  header[100];

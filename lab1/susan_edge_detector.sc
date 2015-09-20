@@ -15,7 +15,7 @@ import "monitor";
 behavior Main(void)
 {
   c_queue input_buffer(7720ul);
-  c_handshake start();
+  c_handshake start;
   c_queue output_buffer(7720ul);
 
   Stimulus stimulus(start, input_buffer);
