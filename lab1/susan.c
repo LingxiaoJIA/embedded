@@ -30,16 +30,10 @@ typedef float      TOTAL_TYPE; /* for my PowerPC accelerator only */
 #include "edge_draw.h"
 #include "setup_brightness_lut.h"
 
-
 #define  exit_error(IFB,IFC) { fprintf(stderr,IFB,IFC); exit(0); }
 #define  FTOI(a) ( (a) < 0 ? ((int)(a-0.5)) : ((int)(a+0.5)) )
 typedef  unsigned char uchar;
 typedef  struct {int x,y,info, dx, dy, I;} CORNER_LIST[MAX_CORNERS];
-
-#include "setup_brightness_lut.h"
-#include "susan_edges.h"
-#include "susan_thin.h"
-#include "edge_draw.h"
 
 /* }}} */
 
@@ -182,4 +176,5 @@ uchar mid[x_size*y_size];
 }
 
 /* }}} */
+
 

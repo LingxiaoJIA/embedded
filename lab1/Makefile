@@ -1,7 +1,7 @@
 SCC = scc
 SCFLAGs	= -vv -w -g -d -Tvcds
-MAINSRCS = susan.sc
-OTHSRCS = get_image.sc put_image.sc susan_edges.sc susan_thin.sc setup_brightness_lut.sc edge_draw.sc
+MAINSRCS = susan_edge_detector.sc
+OTHSRCS = stimulus.sc monitor.sc susan.sc setup_brightness_lut.sc susan_edges.sc susan_thin.sc edge_draw.sc
 SRCS = $(MAINSRCS) $(OTHSRCS)
 CPPSRCS = $(SRCS:.sc=.cc)
 OBJS = $(SRCS:.sc=.o)
@@ -13,6 +13,8 @@ RM  = rm -rf
 GOLDFILE = golden.pgm
 INFILE =   input_small.pgm    
 OUTFILE =  output_edge.pgm
+
+.SUFFIXES:	.sc .cc .o
 
 .sc.cc:
 	$(SCC) $* -sc2cch $(SCFLAGS)
@@ -29,13 +31,13 @@ OUTFILE =  output_edge.pgm
 .sc:
 	$(SCC) $* -sc2out $(SCFLAGS)
 
-all: $(TARGETS)
+all:	$(TARGETS)
 
 test:
 	./$$TARGETS	
 	$(CMP) $(OUTFILE) $(GOLDFILE)
 
 clean:
-	$(RM) $(CPPSRCS) $(OBJS) $(TARGETS) $(OUTFILE)
+	$(RM) *.cc *.o *.h *.si *.sir $(TARGETS) $(OUTFILE)
 
 .PHONY: all test clean
