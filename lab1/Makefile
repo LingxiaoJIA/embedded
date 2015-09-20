@@ -1,4 +1,4 @@
-CC = gcc
+CC = scc
 CFLAGS = -static -O4
 MAINSRCS = susan.c
 OTHSRCS = get_image.c put_image.c susan_edges.c susan_thin.c setup_brightness_lut.c edge_draw.c

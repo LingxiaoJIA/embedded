@@ -36,6 +36,5 @@
 
 # tar ball
 *.tar.gz
-*.bak
 *.~
 
