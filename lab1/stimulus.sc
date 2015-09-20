@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 import "c_queue";
-import "c_double_handshake";
+import "c_handshake";
 
 #define  exit_error(IFB, IFC) { \
   fprintf(stderr, IFB, IFC); \
@@ -61,11 +61,7 @@ behavior Stimulus(i_sender Start, out i_sender ImageBuffer)
   char  header[100];
   int tmp;
 
-#ifdef FOPENB
-    if ((fd=fopen(filename,"rb")) == NULL)
-#else
     if ((fd=fopen(filename,"r")) == NULL)
-#endif
       exit_error("Can't input image %s.\n",filename);
 
     /* {{{ read header */
