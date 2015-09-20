@@ -2,6 +2,8 @@
 #include <string.h>
 import "c_queue";
 
+typedef  unsigned char uchar;
+
 //receive in, mid
 behavior EdgeDraw(i_receiver Portin, i_sender Portout)
 {
@@ -12,8 +14,8 @@ int   i;
 uchar *inp, *midp;
 int x_size = 76, y_size = 95;
 int drawing_mode = 0;
-uchar input[x_size * y_size];
-uchar mid[x_size*y_size];
+uchar input[76 * 95];
+uchar mid[76*95];
 
   Portin.receive(input, 7220);
   Portin.receive(mid, 7220);

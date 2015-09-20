@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 import "c_queue";
 
 typedef  unsigned char uchar;
@@ -59,11 +60,9 @@ behavior SusanEdges(i_tranceiver Port)
   uchar input[76 * 95];//use port to receive and store in the in[]
   uchar bp[516];
 
-//initial r and mid, r with all zeros and mid with all 100, and make changes
-//send out in, r, mid...bp do not need send out anymore
-  int r[x_size * y_size];
-  uchar mid[x_size*y_size];
-  int	max_no=2650,
+  int r[76 * 95];
+  uchar mid[76*95];
+  int	max_no=2650;
 
 
   
@@ -309,7 +308,7 @@ behavior SusanEdges(i_tranceiver Port)
 //encapsulate in detectedges
 //the start is the signal from file input, the c_queue Port is the image buffer
 //is there any build-buffer that better than c_queue
-bahavior DETECT_EDGES(i_receiver Portin, i_sender Portout)
+behavior DetectEdges(i_receiver Portin, i_sender Portout)
 {
 	//make port for buffer and communication
 	const unsigned long sizebrightness = 516;//is it ok..?

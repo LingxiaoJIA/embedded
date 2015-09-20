@@ -2,12 +2,14 @@
 #include <string.h>
 import "c_queue";
 
+typedef  unsigned char uchar;
+
 //receive r, mid
 //send mid
 
-Behavior SusanThin(i_receiver Portin,i_sender Portout)
+behavior SusanThin(i_receiver Portin,i_sender Portout)
 {
-void main void
+void main (void)
 {
 int   l[9], centre, nlinks, npieces,
       b01, b12, b21, b10,
