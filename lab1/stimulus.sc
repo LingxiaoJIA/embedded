@@ -14,7 +14,7 @@ import "c_handshake";
   exit(0); \
 }
 
-behavior Stimulus(i_sender Start, out i_sender ImageBuffer)
+behavior Stimulus(i_sender Start, out i_sender InputBuffer)
 {
 
   /* {{{ get_image(filename,input,x_size,y_size) */
@@ -81,7 +81,8 @@ behavior Stimulus(i_sender Start, out i_sender ImageBuffer)
       exit_error("Image %s is wrong size.\n", filename);
 
     fclose(fd);
-    ImageBuffer.send(input, 7220ul); // 76 * 95
+    InputBuffer.send(input, 7220ul); // 76 * 95
+    Start.send();
   }
 
   /* }}} */
