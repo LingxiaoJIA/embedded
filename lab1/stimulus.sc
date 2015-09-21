@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "sim.sh"
 import "c_queue";
 import "c_handshake";
 
@@ -15,7 +16,7 @@ import "c_handshake";
   exit(0); \
 }
 
-behavior Stimulus(i_send Start, i_sender InputBuffer)
+behavior Stimulus(i_send Start, i_sender InputBuffer,out long long time_start)
 {
 
   /* {{{ get_image(filename,input,x_size,y_size) */
@@ -60,6 +61,10 @@ behavior Stimulus(i_send Start, i_sender InputBuffer)
   FILE  *fd;
   char  header[100];
   int tmp;
+  sim_time time;
+  sim_time_string buf;
+  const char *time_start_string;
+  //sim_time_ll time_start;
 
     if ((fd=fopen(filename,"r")) == NULL)
       exit_error("Can't input image %s.\n",filename);
@@ -81,8 +86,14 @@ behavior Stimulus(i_send Start, i_sender InputBuffer)
       exit_error("Image %s is wrong size.\n", filename);
 
     fclose(fd);
-    InputBuffer.send(input, 7220ul); // 76 * 95
-    Start.send();
+    while(true){
+      InputBuffer.send(input, 7220ul); // 76 * 95
+      waitfor(1000);  //wait for 1000 units before sending start signal.
+      time=now();
+      time_start_string=time2str(buf,time);
+      time_start=str2ll(10,time_start_string);
+      Start.send();
+    }
   }
 
   /* }}} */
