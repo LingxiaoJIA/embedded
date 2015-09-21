@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "sim.sh"
 #define  exit_error(IFB,IFC) { fprintf(stderr,IFB,IFC); exit(0); }
 import "c_queue";
 
 //const unsigned long SIZE = 1;
 
 behavior Monitor(
-  i_receiver Port)
+  i_receiver Port,in long long time_start)
 {
 char filename [100] = "output_edge.pgm";
 FILE  *fd;
@@ -15,6 +16,10 @@ int x_size = 76, y_size = 95;
 
   void main(void)
   {
+    sim_time time;
+    sim_time_string buf,buf_total;
+    const char *time_end_string;
+    long long time_end,time_total;
     #ifdef FOPENB
       if ((fd=fopen(filename,"wb")) == NULL) 
     #else
@@ -28,6 +33,12 @@ int x_size = 76, y_size = 95;
   
     Port.receive(input,x_size*y_size);
 
+    time=now();
+    time_end_string=time2str(buf, time);
+    time_end=str2ll(10,time_end_string);
+    time_total= time_end - time_start;    
+    printf("\nThe time is now: %s\n", ll2str(10,buf_total,time_total));
+    
     if (fwrite(input, x_size*y_size, 1, fd) != 1)
       exit_error("Can't write image %s.\n",filename);
 
