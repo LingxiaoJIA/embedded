@@ -8,7 +8,7 @@ import "c_handshake";
 
 typedef  unsigned char uchar;
 
-behavior Susan(i_receive start, i_receiver Port_stimulus, i_sender Port_monitor)
+behavior Susan(i_receiver Port_readImage, i_sender Port_writeImage)
 {
 	//the size of port_stimulus should be 7220
 	const unsigned long sizeEdgesout = 43320 ;//is it ok..?
@@ -26,14 +26,13 @@ behavior Susan(i_receive start, i_receiver Port_stimulus, i_sender Port_monitor)
 	c_queue		c_Thinout(sizeThinout);
 	c_queue		c_Drawin(sizeDrawin);
 
-	DetectEdges detect_edges(Port_stimulus, c_Edgesout);
+	DetectEdges detect_edges(Port_readImage, c_Edgesout);
 	SusanThin susan_thin(c_Thinin, c_Thinout);
-	EdgeDraw edge_draw(c_Drawin, Port_monitor);
+	EdgeDraw edge_draw(c_Drawin, Port_writeImage);
 
 	
 	void main(void)
 	{
-		start.receive();
 		//manage the data between detectedge, susanthin, edgedraw
 		//start detectedges
 		detect_edges.main();
