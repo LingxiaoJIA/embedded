@@ -17,10 +17,11 @@ behavior Main(void)
   c_queue input_buffer(7720ul);
   c_handshake start;
   c_queue output_buffer(7720ul);
+  long long time;
 
-  Stimulus stimulus(start, input_buffer);
+  Stimulus stimulus(start, input_buffer, time);
   Susan susan(start, input_buffer, output_buffer);
-  Monitor monitor(output_buffer);
+  Monitor monitor(output_buffer,time);
 
   int main(void) {
     par {
