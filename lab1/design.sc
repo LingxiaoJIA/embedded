@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 import "c_queue";
+import "c_double_handshake";
 import "read_image";
 import "susan";
 import "write_image";
-import "c_double_handshake";
 
 typedef  unsigned char uchar;
 
