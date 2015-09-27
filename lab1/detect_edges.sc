@@ -48,6 +48,148 @@ behavior SetupBrightnessLut(i_tranceiver Port)
 //uchar mid[x_size*y_size];
 //int max_no_edges=2650;
 
+behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*22],in int thread,in int thread_size)
+{
+  int i,j,n;
+  uchar *p,*cp;
+  int	max_no=2650;
+
+  void main(void)
+  {  
+   for (i=3+22*thread;i<22*thread+thread_size+3;i++)
+    for (j=3;j<x_size-3;j++)
+    {
+      n=100;
+      p=input + (i-3)*x_size + j - 1;
+      cp=bp+258 + input[i*x_size+j];
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-3; 
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-5;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-6;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=2;
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-6;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-5;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-3;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+
+      if (n<=max_no)
+        r[(i-22*thread)*x_size+j] = max_no - n;
+    }
+  }
+};
+
+behavior SusanEdgesFirstLoopLast(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*23],in int thread,in int thread_size)
+{
+  int i,j,n;
+  uchar *p,*cp;
+  int	max_no=2650;
+
+  void main(void)
+  {  
+   for (i=3+22*thread;i<22*thread+thread_size+3;i++)
+    for (j=3;j<x_size-3;j++)
+    {
+      n=100;
+      p=input + (i-3)*x_size + j - 1;
+      cp=bp+258 + input[i*x_size+j];
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-3; 
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-5;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-6;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=2;
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-6;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-5;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+      p+=x_size-3;
+
+      n+=*(cp-*p++);
+      n+=*(cp-*p++);
+      n+=*(cp-*p);
+
+      if (n<=max_no)
+        r[(i-22*thread)*x_size+j] = max_no - n;
+    }
+  }
+};
+
 
 behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
 {
@@ -61,11 +203,16 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
   uchar bp[516];
 
   int r[76 * 95];
+  int r1[76*22],r2[76*22],r3[76*22],r4[76*23];
   uchar mid[76*95];
   int	max_no=2650;
+ 
+  //SusanEdgesFirstLoop(bp,input,x_size,y_size,r,thread,thread_size); 
+  SusanEdgesFirstLoop Sefl1(bp,input,x_size,y_size,r1,0,22);
+  SusanEdgesFirstLoop Sefl2(bp,input,x_size,y_size,r2,1,22);
+  SusanEdgesFirstLoop Sefl3(bp,input,x_size,y_size,r3,2,22);
+  SusanEdgesFirstLoopLast Sefl4(bp,input,x_size,y_size,r4,3,23);
 
-
-  
   void main(void)
   {
   //receive in and bp here
@@ -75,7 +222,16 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
 //original
   memset (r,0,x_size * y_size * sizeof(int));
 
-  for (i=3;i<y_size-3;i++)
+  Sefl1.main();
+  Sefl2.main();
+  Sefl3.main();
+  Sefl4.main();
+  memcpy(r,r1,76*22);
+  memcpy(&r[76*22],r2,76*22);
+  memcpy(&r[2*76*22],r3,76*22);
+  memcpy(&r[3*76*22],r4,76*23);
+
+/*  for (i=3;i<y_size-3;i++)
     for (j=3;j<x_size-3;j++)
     {
       n=100;
@@ -135,7 +291,7 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
       if (n<=max_no)
         r[i*x_size+j] = max_no - n;
     }
-
+*/
   for (i=4;i<y_size-4;i++)
     for (j=4;j<x_size-4;j++)
     {
