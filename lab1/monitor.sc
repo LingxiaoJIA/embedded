@@ -3,6 +3,7 @@
 #include "sim.sh"
 #define  exit_error(IFB,IFC) { fprintf(stderr,IFB,IFC); exit(0); }
 import "c_queue";
+import "c_double_handshake";
 
 //const unsigned long SIZE = 1;
 

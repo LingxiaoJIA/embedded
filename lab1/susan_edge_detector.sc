@@ -8,25 +8,26 @@
 #include <stdio.h>
 import "c_queue";
 import "c_handshake";
+import "c_double_handshake";
 import "stimulus";
-import "susan";
+import "design";
 import "monitor";
 
 behavior Main(void)
 {
   c_queue input_buffer(7720ul);
   c_handshake start;
-  c_queue output_buffer(7720ul);
+  c_double_handshake designToMonitor;
   long long time;
 
   Stimulus stimulus(start, input_buffer, time);
-  Susan susan(start, input_buffer, output_buffer);
-  Monitor monitor(output_buffer,time);
+  Design design(start, input_buffer, designToMonitor);
+  Monitor monitor(designToMonitor, time);
 
   int main(void) {
     par {
       stimulus;
-      susan;
+      design;
       monitor;
     }
     return 0;
