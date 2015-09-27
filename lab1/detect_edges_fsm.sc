@@ -349,7 +349,7 @@ behavior State1(i_receiver Portin, i_sender Portout)
 };
 
 
-behavior DetectEdgesFSM(i_receiver Portin, i_sender Portout, event clk)
+behavior DetectEdgesFSM(i_receiver Portin, i_sender Portout)
 {
 	State1 s1(Portin, Portout);
 	void main(void)
@@ -357,7 +357,8 @@ behavior DetectEdgesFSM(i_receiver Portin, i_sender Portout, event clk)
 		fsm
 		{
 			s1:
-				goto s1;
+				break;
+				//goto s1;
 		}
 	}
 };

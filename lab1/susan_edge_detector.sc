@@ -15,7 +15,7 @@ import "monitor";
 
 behavior Main(void)
 {
-  c_queue input_buffer(7720ul);
+  c_queue input_buffer(7220ul);
   c_handshake start;
   c_double_handshake designToMonitor;
   long long time;

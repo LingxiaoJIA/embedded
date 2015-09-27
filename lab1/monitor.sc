@@ -14,13 +14,17 @@ char filename [100] = "output_edge.pgm";
 FILE  *fd;
 unsigned char input[7220];
 int x_size = 76, y_size = 95;
-
-  void main(void)
-  {
+void main(void)
+{
+    //while(true)
+    //{
     sim_time time;
     sim_time_string buf,buf_total;
     const char *time_end_string;
     long long time_end,time_total;
+
+    Port.receive(input,x_size*y_size);
+
     #ifdef FOPENB
       if ((fd=fopen(filename,"wb")) == NULL) 
     #else
@@ -32,7 +36,6 @@ int x_size = 76, y_size = 95;
     fprintf(fd,"%d %d\n", x_size, y_size);
     fprintf(fd,"255\n");
   
-    Port.receive(input,x_size*y_size);
 
     time=now();
     time_end_string=time2str(buf, time);
@@ -44,7 +47,8 @@ int x_size = 76, y_size = 95;
       exit_error("Can't write image %s.\n",filename);
 
    fclose(fd);
-  }
+   //}//while true
+}//main
 };
 
 //For individual testing only.

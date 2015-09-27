@@ -44,10 +44,11 @@ behavior Main(void)
   c_handshake start;
   //c_queue output_buffer(7720ul);
   c_double_handshake designToMonitor;
+  long long time;
 
-  Stimulus stimulus(start, input_buffer, );
+  Stimulus stimulus(start, input_buffer, time);
   DesignFSM design_fsm(start, input_buffer, designToMonitor, SystemClock);
-  Monitor monitor(designToMonitor, );
+  Monitor monitor(designToMonitor, time);
 
   int main(void) {
     printf("Starting....\n");

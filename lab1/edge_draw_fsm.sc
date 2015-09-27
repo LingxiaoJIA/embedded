@@ -63,7 +63,7 @@ uchar mid[76*95];
 };
 
 
-behavior EdgeDrawFSM(i_receiver Portin, i_sender Portout, event clk)
+behavior EdgeDrawFSM(i_receiver Portin, i_sender Portout)
 {
 	State3 s3(Portin, Portout);
 	void main(void)
@@ -71,7 +71,8 @@ behavior EdgeDrawFSM(i_receiver Portin, i_sender Portout, event clk)
 		fsm
 		{
 			s3:
-				goto s3;			
+				break;
+				//goto s3;			
 		}
 	}
 };

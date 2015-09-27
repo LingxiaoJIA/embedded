@@ -3,12 +3,12 @@
 import "c_queue";
 import "read_image_fsm";
 import "susan_fsm";
-import "write_image_fsm";
+import "write_image";
 import "c_double_handshake";
 
 typedef  unsigned char uchar;
 
-behavior Design(i_receive start, i_receiver stimulusQueue, i_sender dHSWriteToMonitor, event clk)
+behavior DesignFSM(i_receive start, i_receiver stimulusQueue, i_sender dHSWriteToMonitor, event clk)
 {
 
 	const unsigned long readSusanSize = 7220;
@@ -21,7 +21,7 @@ behavior Design(i_receive start, i_receiver stimulusQueue, i_sender dHSWriteToMo
 
 	ReadImageFSM read_image_fsm(start, stimulusQueue, queueReadToSusan);
 	SusanFSM susan_fsm(queueReadToSusan, queueSusanToWrite, clk);
-	WriteImageFSM write_image_fsm(queueSusanToWrite, dHSWriteToMonitor);
+	WriteImage write_image(queueSusanToWrite, dHSWriteToMonitor);
 
 
 	void main(void)
@@ -29,7 +29,7 @@ behavior Design(i_receive start, i_receiver stimulusQueue, i_sender dHSWriteToMo
 		par{
 			read_image_fsm.main();
 			susan_fsm.main();
-			write_image_fsm.main();
+			write_image.main();
 		}
 	}
 };

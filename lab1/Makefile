@@ -1,7 +1,7 @@
 SCC = scc
 SCFLAGs	= -vv -w -g -d -Tvcds
 MAINSRCS = susan_edge_detector.sc
-OTHSRCS = stimulus.sc monitor.sc susan.sc detect_edges.sc susan_thin.sc edge_draw.sc design.sc write_image.sc read_image.sc
+OTHSRCS = stimulus.sc monitor.sc susan.sc detect_edges_fsm.sc susan_thin_fsm.sc edge_draw_fsm.sc design.sc write_image.sc read_image.sc
 SRCS = $(MAINSRCS) $(OTHSRCS)
 CPPSRCS = $(SRCS:.sc=.cc)
 OBJS = $(SRCS:.sc=.o)

@@ -236,7 +236,7 @@ uchar *mp;
 }//main
 };
 
-behavior SusanThinFSM(i_receiver Portin, i_sender Portout, event clk)
+behavior SusanThinFSM(i_receiver Portin, i_sender Portout)
 {
 	State2 s2(Portin, Portout);	
 	void main(void)
@@ -244,7 +244,8 @@ behavior SusanThinFSM(i_receiver Portin, i_sender Portout, event clk)
 		fsm
 		{
 			s2:
-				goto s2;
+				break;
+				//goto s2;
 		}
 	}
 };
