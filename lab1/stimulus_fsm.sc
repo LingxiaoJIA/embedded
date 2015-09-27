@@ -61,8 +61,6 @@ behavior Stimulus(i_send Start, i_sender InputBuffer)
   char  header[100];
   int tmp;
 
-	printf("in stimulus\n");
-
     if ((fd=fopen(filename,"r")) == NULL)
       exit_error("Can't input image %s.\n",filename);
 
