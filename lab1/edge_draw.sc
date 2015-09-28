@@ -4,7 +4,8 @@ import "c_queue";
 
 typedef unsigned char uchar;
 
-behavior EdgeDrawWhite(inout uchar input[76*95], in uchar mid[76*95], in int threadID, in int numThreads)
+behavior EdgeDrawWhite(inout uchar input[76*95], in uchar mid[76*95], 
+    in int threadID, in int numThreads)
 {
   void main(void)
   {
@@ -30,7 +31,8 @@ behavior EdgeDrawWhite(inout uchar input[76*95], in uchar mid[76*95], in int thr
   }
 };
 
-behavior EdgeDrawBlack(inout uchar input[76*95], in uchar mid[76*95], in int threadID, in int numThreads)
+behavior EdgeDrawBlack(inout uchar input[76*95], in uchar mid[76*95], 
+    in int threadID, in int numThreads)
 {
   void main(void)
   {
@@ -61,6 +63,7 @@ behavior EdgeDraw(i_receiver FromThin, i_sender ToWrite)
 
   EdgeDrawWhite w0(input, mid, 0, 2);
   EdgeDrawWhite w1(input, mid, 1, 2);
+
   EdgeDrawBlack b0(input, mid, 0, 2);
   EdgeDrawBlack b1(input, mid, 1, 2);
 
@@ -80,14 +83,7 @@ behavior EdgeDraw(i_receiver FromThin, i_sender ToWrite)
       b0;
       b1;
     }
-    f = fopen("output", "a+");
-    for (i = 0; i < 7220; ++i) {
-      fprintf(f, "input[%d] = %d\n", i, input[i]);
-      fprintf(f, "mid[%d] = %d\n", i, mid[i]);
-    }
-    fclose(f);
 
-    //send in out
     ToWrite.send(input, 7220);
   }//main
 };
