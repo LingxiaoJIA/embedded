@@ -5,16 +5,17 @@ import "c_queue";
 import "detect_edges_fsm";
 import "susan_thin_fsm";
 import "edge_draw_fsm";
+import "c_bit64_queue";	
 
 typedef unsigned char uchar;
 
-behavior Susan(i_receiver Port_readImage, i_sender Port_writeImage)
+behavior Susan(i_bit64_receiver Port_readImage, i_bit64_sender Port_writeImage)
 {
 	const unsigned long sizeEdgesout = 43320;
 	const unsigned long sizeDrawin = 14440;
 
-	c_queue		c_Edgesout(sizeEdgesout);
-	c_queue		c_Drawin(sizeDrawin);
+	c_bit64_queue		c_Edgesout(sizeEdgesout);
+	c_bit64_queue		c_Drawin(sizeDrawin);
 
 	sim_time_string	buf;	
 

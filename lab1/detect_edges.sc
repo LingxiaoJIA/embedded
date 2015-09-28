@@ -2,13 +2,14 @@
 #include <string.h>
 #include <math.h>
 import "c_queue";
+import "c_bit64_queue";	
 
 typedef  unsigned char uchar;
 
 //
 //
 //dependency between setup_brightness and susan_edges
-behavior SetupBrightnessLut(i_tranceiver Port)
+behavior SetupBrightnessLut(i_bit64_sender Port)
 {
 	//NEED to use port to receive bp here
 	int   k;
@@ -18,7 +19,7 @@ behavior SetupBrightnessLut(i_tranceiver Port)
 	int thresh = 20;
 	uchar bp[516];//make an array here and use Port to send it out and store in the array
 		      //in the array at edgedetect behavior
-
+	bit[64] temp2;
 
 	void main(void)
 	{
@@ -32,7 +33,11 @@ behavior SetupBrightnessLut(i_tranceiver Port)
     		  //*(*bp[258]+k)= (uchar)temp;
    		  bp[258+k] = (uchar)temp;
   		}
-		Port.send(bp,516);//send the bp[] out
+		for(k=0; k <516; k++){
+			temp2 = bp[k];
+			Port.send(temp2);//send the bp[] out
+		}
+
 	}
 };
 
@@ -49,7 +54,7 @@ behavior SetupBrightnessLut(i_tranceiver Port)
 //int max_no_edges=2650;
 
 
-behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
+behavior SusanEdges(i_bit64_receiver FromBrightness, i_bit64_sender ToThin)
 {
   float z;
   int   do_symmetry, i, j, m, n, a, b, x, y, w;
@@ -64,13 +69,21 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
   uchar mid[76*95];
   int	max_no=2650;
 
-
+  int k;
+  bit[64] temp;
   
   void main(void)
   {
   //receive in and bp here
-  FromBrightness.receive(input,7220);
-  FromBrightness.receive(bp,516);
+	for(k=0;k<7220;k++){
+		FromBrightness.receive(&temp);
+		input[k] = temp;
+	}
+	for(k=0;k<516;k++){
+		FromBrightness.receive(&temp);
+		bp[k] = temp;
+	}
+
   memset (mid,100,x_size * y_size);//this is from susan.c main()
 //original
   memset (r,0,x_size * y_size * sizeof(int));
@@ -298,9 +311,18 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
       }
     }	
   //do not need to send bp anymore
-  ToThin.send(input,7220);
-  ToThin.send(mid,7220);
-  ToThin.send(r,7220*sizeof(int));
+	for(k=0;k<7220;k++){
+		temp = input[k];
+		ToThin.send(temp);
+	}
+	for(k=0;k<7220;k++){
+		temp = mid[k];
+		ToThin.send(temp);
+	}
+	for(k=0;k<7220;k++){
+		temp = r[k];
+		ToThin.send(temp);
+	}
   }//void main of behavior
 };
 
@@ -308,13 +330,15 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
 //encapsulate in detectedges
 //the start is the signal from file input, the c_queue Port is the image buffer
 //is there any build-buffer that better than c_queue
-behavior DetectEdges(i_receiver Portin, i_sender Portout)
+behavior DetectEdges(i_bit64_receiver Portin, i_bit64_sender Portout)
 {
 	//make port for buffer and communication
 	const unsigned long sizebrightness = 516;//is it ok..?
 	const unsigned long sizeedges = 43320;//is it ok..?
-	c_queue		c_brightness(sizebrightness);
-	c_queue		c_edges(sizeedges);
+	int k = 0;
+	bit[64] temp;
+	c_bit64_queue		c_brightness(sizebrightness);
+	c_bit64_queue		c_edges(sizeedges);
 	SetupBrightnessLut	setup_brightness_lut(c_brightness);
 	SusanEdges	susan_edges(c_edges, Portout);
 
@@ -331,14 +355,27 @@ behavior DetectEdges(i_receiver Portin, i_sender Portout)
 	void main(void)
 	{
 		//receive from SUSAN
-		Portin.receive(input,7220);//receive the whole uchar in[] array here?????
+		for(k=0;k<7220;k++)
+		{
+			Portin.receive(&temp);//receive the whole uchar in[] array here?????
+			input[k] = temp;
+		}
 		//the process of detectEdges
 		//setup brightness
 		setup_brightness_lut.main();
-		c_brightness.receive(bp,516);//receive all of the bp in one time???
+		for(k=0;k<516;k++){
+			c_brightness.receive(&temp);//receive all of the bp in one time???
+			bp[k] = temp;
+		}
 		//send in and bp for edges use
-		c_edges.send(input,7220);
-		c_edges.send(bp,516);		
+		for(k=0;k<7220;k++){
+			temp = input[k];
+			c_edges.send(temp);
+		}
+		for(k=0;k<516;k++){
+			temp = bp[k];
+			c_edges.send(temp);
+		}		
 		//edges process
 		susan_edges.main();
 		//update in, r, mid

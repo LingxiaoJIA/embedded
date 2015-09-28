@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 import "c_queue";
+import "c_bit64_queue";	
 
 typedef  unsigned char uchar;
 
 //receive in, mid
-behavior EdgeDraw(i_receiver Portin, i_sender Portout)
+behavior EdgeDraw(i_bit64_receiver Portin, i_bit64_sender Portout)
 {
 
 void main(void)
@@ -16,9 +17,20 @@ int x_size = 76, y_size = 95;
 int drawing_mode = 0;
 uchar input[76 * 95];
 uchar mid[76*95];
+int k;
+bit[64] temp;
 
-  Portin.receive(input, 7220);
-  Portin.receive(mid, 7220);
+
+for(k=0;k<7220;k++){
+	Portin.receive(&temp);
+	input[k] = temp;
+}
+for(k=0;k<7220;k++){
+	Portin.receive(&temp);
+	mid[k] = temp;
+}
+
+
 
   if (drawing_mode==0)
   {
@@ -46,7 +58,11 @@ uchar mid[76*95];
     midp++;
   }
   //send in out
-  Portout.send(input, 7220);
+for(k=0;k<7220;k++){
+	temp = input[k];
+	Portout.send(temp);
+}
+
 }//main
 };
 
