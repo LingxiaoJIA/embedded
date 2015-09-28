@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 import "c_queue";
+import "c_bit64_queue";	
 
 typedef unsigned char uchar;
 
-behavior SusanThin(i_receiver Portin,i_sender Portout)
+behavior SusanThin(i_bit64_receiver Portin,i_bit64_sender Portout)
 {
 void main (void)
 {
@@ -15,6 +16,8 @@ int   l[9], centre, nlinks, npieces,
       m, n, a, b, x, y, i, j;
 int x_size = 76;
 int y_size = 95;
+int k;
+bit[64] temp;
 
 uchar input[76*95];
 int r[76*95];
@@ -24,9 +27,18 @@ uchar *mp;
 
 //receive the r and mid
 
-  Portin.receive(input,7220);
-  Portin.receive(mid, 7220);//implementation
-  Portin.receive(r, 7220*sizeof(int));//implementation
+	for(k=0;k<7220;k++){
+		Portin.receive(&temp);
+		input[k] = temp;
+	}
+	for(k=0;k<7220;k++){
+		Portin.receive(&temp);
+		mid[k] = temp;
+	}
+	for(k=0;k<7220;k++){
+		Portin.receive(&temp);
+		r[k] = temp;
+	}
 
   for (i=4;i<y_size-4;i++)
     for (j=4;j<x_size-4;j++)
@@ -223,7 +235,13 @@ uchar *mp;
 /* }}} */
       }
   //send mid out
-  Portout.send(input,7220);
-  Portout.send(mid, 7220);
+	for(k=0;k<7220;k++){
+		temp = input[k];
+		Portout.send(temp);
+	}
+	for(k=0;k<7220;k++){
+		temp = mid[k];
+		Portout.send(temp);
+	}
 }//main
 };

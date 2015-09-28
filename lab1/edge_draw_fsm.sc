@@ -3,8 +3,9 @@
 #include <string.h>
 import "c_queue";
 import "edge_draw";
+import "c_bit64_queue";	
 
-behavior EdgeDrawFSM(i_receiver Portin, i_sender Portout)
+behavior EdgeDrawFSM(i_bit64_receiver Portin, i_bit64_sender Portout)
 {
 	EdgeDraw edge_draw(Portin, Portout);
 	void main(void)

@@ -8,7 +8,8 @@ SRCS = $(MAINSRCS) $(OTHSRCS)
 CPPSRCS = $(SRCS:.sc=.cc)
 OBJS = $(SRCS:.sc=.o)
 SIRS = $(SRCS:.sc=.sir)
-TARGETS = $(MAINSRCS:.sc=)
+MAINSIR = $(MAINSRCS:.sc=.sir)
+TARGET = $(MAINSRCS:.sc=)
 
 CMP = diff -s
 RM  = rm -rf
@@ -20,16 +21,25 @@ OUTFILE =  output_edge.pgm
 %.sir: %.sc
 	$(SCC) $* -sc2sir $(SCFLAGS)
 
-$(TARGETS): $(SIRS)
-	$(SCC) $(TARGETS) -sir2out $(SCFLAGS)
+$(TARGET): $(SIRS)
+	$(SCC) $(TARGET) -sir2out $(SCFLAGS)
 
-all:	$(TARGETS)
+all:	$(TARGET)
 
-test:
+par: $(TARGET)
+	$(SCC) $(TARGET) $(SCFLAGS) -par
+
+list: $(TARGET)
+	sir_list -t $(MAINSIR)
+
+tree: $(TARGET)
+	sir_tree -blt $(MAINSIR)
+
+test: $(TARGET)
 	./susan_edge_detector
 	$(CMP) $(OUTFILE) $(GOLDFILE)
 
 clean:
-	$(RM) *.cc *.o *.h *.si *.sir $(TARGETS) $(OUTFILE)
+	$(RM) *.cc *.o *.h *.si *.sir $(TARGET) $(OUTFILE)
 
-.PHONY: all test clean
+.PHONY: all par list tree test clean 

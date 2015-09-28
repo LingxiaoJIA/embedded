@@ -10,13 +10,14 @@
 #include "sim.sh"
 import "c_queue";
 import "c_handshake";
+import "c_bit64_queue";
 
 #define  exit_error(IFB, IFC) { \
   fprintf(stderr, IFB, IFC); \
   exit(0); \
 }
 
-behavior Stimulus(i_send Start, i_sender InputBuffer,out long long time_start)
+behavior Stimulus(i_send Start, i_bit64_sender InputBuffer,out long long time_start)
 {
 
   /* {{{ get_image(filename,input,x_size,y_size) */
@@ -64,6 +65,9 @@ behavior Stimulus(i_send Start, i_sender InputBuffer,out long long time_start)
   sim_time time;
   sim_time_string buf;
   const char *time_start_string;
+    int k = 0;
+    int j = 0;
+    bit[64] temp;
   //sim_time_ll time_start;
 
     if ((fd=fopen(filename,"r")) == NULL)
@@ -86,10 +90,15 @@ behavior Stimulus(i_send Start, i_sender InputBuffer,out long long time_start)
       exit_error("Image %s is wrong size.\n", filename);
 
     fclose(fd);
-    while(true) {
+    for (tmp = 0; tmp < 100; ++tmp) {
+    // while(true) {
       waitfor(1000);  //wait for 1000 units before sending start signal.
       Start.send();
-      InputBuffer.send(input, 7220); // 76 * 95
+      for(j=0;j<7220;j++)
+      {
+	temp = input[j];
+	InputBuffer.send(temp); // 76 * 95
+      }
       time=now();
       time_start_string=time2str(buf,time);
       time_start=str2ll(10,time_start_string);
