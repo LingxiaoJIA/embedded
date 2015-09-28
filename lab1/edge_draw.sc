@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 import "c_queue";
+import "c_bit64_queue";	
 
 typedef unsigned char uchar;
 
@@ -55,8 +56,7 @@ behavior EdgeDrawBlack(inout uchar input[76*95], in uchar mid[76*95],
   }
 };
 
-//receive in, mid
-behavior EdgeDraw(i_receiver FromThin, i_sender ToWrite)
+behavior EdgeDraw(i_bit64_receiver Portin, i_bit64_sender Portout)
 {
   uchar input[76*95];
   uchar mid[76*95];
@@ -69,11 +69,19 @@ behavior EdgeDraw(i_receiver FromThin, i_sender ToWrite)
 
   void main(void)
   {
-    int i;
-    FILE *f;
+  int k;
+  bit[64] temp;
+  int i;
+  FILE *f;
 
-    FromThin.receive(input, 7220);
-    FromThin.receive(mid, 7220);
+    for(k=0;k<7220;k++){
+      Portin.receive(&temp);
+      input[k] = temp;
+    }
+    for(k=0;k<7220;k++){
+      Portin.receive(&temp);
+      mid[k] = temp;
+    }
     
     par {
       w0;
@@ -84,7 +92,10 @@ behavior EdgeDraw(i_receiver FromThin, i_sender ToWrite)
       b1;
     }
 
-    ToWrite.send(input, 7220);
+    for(k=0;k<7220;k++){
+      temp = input[k];
+      Portout.send(temp);
+    }
   }//main
 };
 

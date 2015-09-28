@@ -12,10 +12,11 @@ import "c_double_handshake";
 import "stimulus";
 import "design";
 import "monitor";
+import "c_bit64_queue";	
 
 behavior Main(void)
 {
-  c_queue input_buffer(7220ul);
+  c_bit64_queue input_buffer(7220ul);
   c_handshake start;
   c_double_handshake designToMonitor;
   long long time;
