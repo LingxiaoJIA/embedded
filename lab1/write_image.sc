@@ -13,7 +13,9 @@ behavior WriteImage(i_receiver queueSusanToWrite, i_sender dHSWriteToMonitor)
 	
 	void main(void)
 	{
-		queueSusanToWrite.receive(input,7220);
-		dHSWriteToMonitor.send(input,7220);
+    while(true) {
+      queueSusanToWrite.receive(input,7220);
+      dHSWriteToMonitor.send(input,7220);
+    }
 	}
 };

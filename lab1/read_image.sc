@@ -13,9 +13,11 @@ behavior ReadImage(i_receive start, i_receiver stimulusQueue, i_sender queueRead
 
 	void main(void)
 	{
-		start.receive();
-		stimulusQueue.receive(input,7220);
-		queueReadToSusan.send(input,7220);
+    while(true) {
+      start.receive();
+      stimulusQueue.receive(input,7220);
+      queueReadToSusan.send(input,7220);
+    }
 	}
 };
 
