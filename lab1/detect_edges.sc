@@ -48,7 +48,7 @@ behavior SetupBrightnessLut(i_tranceiver Port)
 //uchar mid[x_size*y_size];
 //int max_no_edges=2650;
 
-behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*22],in int thread,in int thread_size)
+behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*95],in int thread,in int thread_size)
 {
   int i,j,n;
   uchar *p,*cp;
@@ -114,257 +114,12 @@ behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_siz
       n+=*(cp-*p);
 
       if (n<=max_no)
-        r[(i-22*thread)*x_size+j] = max_no - n;
-    }
-  }
-};
-
-behavior SusanEdgesFirstLoopLast(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*23],in int thread,in int thread_size)
-{
-  int i,j,n;
-  uchar *p,*cp;
-  int	max_no=2650;
-
-  void main(void)
-  {  
-   for (i=3+22*thread;i<22*thread+thread_size+3;i++)
-    for (j=3;j<x_size-3;j++)
-    {
-      n=100;
-      p=input + (i-3)*x_size + j - 1;
-      cp=bp+258 + input[i*x_size+j];
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=x_size-3; 
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=x_size-5;
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=x_size-6;
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=2;
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=x_size-6;
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=x_size-5;
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-      p+=x_size-3;
-
-      n+=*(cp-*p++);
-      n+=*(cp-*p++);
-      n+=*(cp-*p);
-
-      if (n<=max_no)
-        r[(i-22*thread)*x_size+j] = max_no - n;
+        r[i*x_size+j] = max_no - n;
     }
   }
 };
 
 behavior SusanEdgeSecondLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,in int r[76*95],out uchar mid[76*95],in int thread,in int thread_size)
-{
-  float z;
-  int do_symmetry,i,j,m,n,x,y,a,b,w;
-  uchar *p,*cp;
-  uchar c;
-  int	max_no=2650;
-
-  void main(void)
-  {
-    for (i=4+22*thread;i<22*thread+thread_size+4;i++)
-    for (j=4;j<x_size-4;j++)
-    {
-      if (r[i*x_size+j]>0)
-      {
-        m=r[i*x_size+j];
-        n=max_no - m;
-        cp=bp+258 + input[i*x_size+j];
-
-        if (n>600)
-        {
-          p=input + (i-3)*x_size + j - 1;
-          x=0;y=0;
-
-          c=*(cp-*p++);x-=c;y-=3*c;
-          c=*(cp-*p++);y-=3*c;
-          c=*(cp-*p);x+=c;y-=3*c;
-          p+=x_size-3; 
-    
-          c=*(cp-*p++);x-=2*c;y-=2*c;
-          c=*(cp-*p++);x-=c;y-=2*c;
-          c=*(cp-*p++);y-=2*c;
-          c=*(cp-*p++);x+=c;y-=2*c;
-          c=*(cp-*p);x+=2*c;y-=2*c;
-          p+=x_size-5;
-    
-          c=*(cp-*p++);x-=3*c;y-=c;
-          c=*(cp-*p++);x-=2*c;y-=c;
-          c=*(cp-*p++);x-=c;y-=c;
-          c=*(cp-*p++);y-=c;
-          c=*(cp-*p++);x+=c;y-=c;
-          c=*(cp-*p++);x+=2*c;y-=c;
-          c=*(cp-*p);x+=3*c;y-=c;
-          p+=x_size-6;
-
-          c=*(cp-*p++);x-=3*c;
-          c=*(cp-*p++);x-=2*c;
-          c=*(cp-*p);x-=c;
-          p+=2;
-          c=*(cp-*p++);x+=c;
-          c=*(cp-*p++);x+=2*c;
-          c=*(cp-*p);x+=3*c;
-          p+=x_size-6;
-    
-          c=*(cp-*p++);x-=3*c;y+=c;
-          c=*(cp-*p++);x-=2*c;y+=c;
-          c=*(cp-*p++);x-=c;y+=c;
-          c=*(cp-*p++);y+=c;
-          c=*(cp-*p++);x+=c;y+=c;
-          c=*(cp-*p++);x+=2*c;y+=c;
-          c=*(cp-*p);x+=3*c;y+=c;
-          p+=x_size-5;
-
-          c=*(cp-*p++);x-=2*c;y+=2*c;
-          c=*(cp-*p++);x-=c;y+=2*c;
-          c=*(cp-*p++);y+=2*c;
-          c=*(cp-*p++);x+=c;y+=2*c;
-          c=*(cp-*p);x+=2*c;y+=2*c;
-          p+=x_size-3;
-
-          c=*(cp-*p++);x-=c;y+=3*c;
-          c=*(cp-*p++);y+=3*c;
-          c=*(cp-*p);x+=c;y+=3*c;
-
-          z = sqrt((float)((x*x) + (y*y)));
-          if (z > (0.9*(float)n)) /* 0.5 */
-	  {
-            do_symmetry=0;
-            if (x==0)
-              z=1000000.0;
-            else
-              z=((float)y) / ((float)x);
-            if (z < 0) { z=-z; w=-1; }
-            else w=1;
-            if (z < 0.5) { /* vert_edge */ a=0; b=1; }
-            else { if (z > 2.0) { /* hor_edge */ a=1; b=0; }
-            else { /* diag_edge */ if (w>0) { a=1; b=1; }
-                                   else { a=-1; b=1; }}}
-            if ( (m > r[(i+a)*x_size+j+b]) && (m >= r[(i-a)*x_size+j-b]) &&
-                 (m > r[(i+(2*a))*x_size+j+(2*b)]) && (m >= r[(i-(2*a))*x_size+j-(2*b)]) )
-              mid[i*x_size+j] = 1;
-          }
-          else
-            do_symmetry=1;
-        }
-        else 
-          do_symmetry=1;
-
-        if (do_symmetry==1)
-	{ 
-          p=input + (i-3)*x_size + j - 1;
-          x=0; y=0; w=0;
-
-          /*   |      \
-               y  -x-  w
-               |        \   */
-
-          c=*(cp-*p++);x+=c;y+=9*c;w+=3*c;
-          c=*(cp-*p++);y+=9*c;
-          c=*(cp-*p);x+=c;y+=9*c;w-=3*c;
-          p+=x_size-3; 
-  
-          c=*(cp-*p++);x+=4*c;y+=4*c;w+=4*c;
-          c=*(cp-*p++);x+=c;y+=4*c;w+=2*c;
-          c=*(cp-*p++);y+=4*c;
-          c=*(cp-*p++);x+=c;y+=4*c;w-=2*c;
-          c=*(cp-*p);x+=4*c;y+=4*c;w-=4*c;
-          p+=x_size-5;
-    
-          c=*(cp-*p++);x+=9*c;y+=c;w+=3*c;
-          c=*(cp-*p++);x+=4*c;y+=c;w+=2*c;
-          c=*(cp-*p++);x+=c;y+=c;w+=c;
-          c=*(cp-*p++);y+=c;
-          c=*(cp-*p++);x+=c;y+=c;w-=c;
-          c=*(cp-*p++);x+=4*c;y+=c;w-=2*c;
-          c=*(cp-*p);x+=9*c;y+=c;w-=3*c;
-          p+=x_size-6;
-
-          c=*(cp-*p++);x+=9*c;
-          c=*(cp-*p++);x+=4*c;
-          c=*(cp-*p);x+=c;
-          p+=2;
-          c=*(cp-*p++);x+=c;
-          c=*(cp-*p++);x+=4*c;
-          c=*(cp-*p);x+=9*c;
-          p+=x_size-6;
-    
-          c=*(cp-*p++);x+=9*c;y+=c;w-=3*c;
-          c=*(cp-*p++);x+=4*c;y+=c;w-=2*c;
-          c=*(cp-*p++);x+=c;y+=c;w-=c;
-          c=*(cp-*p++);y+=c;
-          c=*(cp-*p++);x+=c;y+=c;w+=c;
-          c=*(cp-*p++);x+=4*c;y+=c;w+=2*c;
-          c=*(cp-*p);x+=9*c;y+=c;w+=3*c;
-          p+=x_size-5;
- 
-          c=*(cp-*p++);x+=4*c;y+=4*c;w-=4*c;
-          c=*(cp-*p++);x+=c;y+=4*c;w-=2*c;
-          c=*(cp-*p++);y+=4*c;
-          c=*(cp-*p++);x+=c;y+=4*c;w+=2*c;
-          c=*(cp-*p);x+=4*c;y+=4*c;w+=4*c;
-          p+=x_size-3;
-
-          c=*(cp-*p++);x+=c;y+=9*c;w-=3*c;
-          c=*(cp-*p++);y+=9*c;
-          c=*(cp-*p);x+=c;y+=9*c;w+=3*c;
-
-          if (y==0)
-            z = 1000000.0;
-          else
-            z = ((float)x) / ((float)y);
-          if (z < 0.5) { /* vertical */ a=0; b=1; }
-          else { if (z > 2.0) { /* horizontal */ a=1; b=0; }
-          else { /* diagonal */ if (w>0) { a=-1; b=1; }
-                                else { a=1; b=1; }}}
-          if ( (m > r[(i+a)*x_size+j+b]) && (m >= r[(i-a)*x_size+j-b]) &&
-               (m > r[(i+(2*a))*x_size+j+(2*b)]) && (m >= r[(i-(2*a))*x_size+j-(2*b)]) )
-            mid[i*x_size+j] = 2;	
-        }
-      }
-    }
-  }
-};
-
-behavior SusanEdgeSecondLoopLast(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,in int r[76*95],out uchar mid[76*95],in int thread,in int thread_size)
 {
   float z;
   int do_symmetry,i,j,m,n,x,y,a,b,w;
@@ -550,23 +305,21 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
   uchar bp[516];
 
   int r[76 * 95];
-  int r1[76*22],r2[76*22],r3[76*22],r4[76*23];
   uchar mid[76*95];
-//  uchar mid1[76*22],mid2[76*22],mid3[76*22],mid4[76*21];
   int	max_no=2650;
  
   //SusanEdgesFirstLoop(bp,input,x_size,y_size,r,thread,thread_size); 
-  SusanEdgesFirstLoop Sefl1(bp,input,x_size,y_size,r1,0,22);
-  SusanEdgesFirstLoop Sefl2(bp,input,x_size,y_size,r2,1,22);
-  SusanEdgesFirstLoop Sefl3(bp,input,x_size,y_size,r3,2,22);
-  //For different size, the last partition apply another behavior
-  SusanEdgesFirstLoopLast Sefl4(bp,input,x_size,y_size,r4,3,23);  
+  SusanEdgesFirstLoop Sefl1(bp,input,x_size,y_size,r,0,22);
+  SusanEdgesFirstLoop Sefl2(bp,input,x_size,y_size,r,1,22);
+  SusanEdgesFirstLoop Sefl3(bp,input,x_size,y_size,r,2,22);
+  SusanEdgesFirstLoop Sefl4(bp,input,x_size,y_size,r,3,23);  
 
   //SusanEdgeSecondLoop(bp,input,x_size,y_size,r,mid,thread,thread_size)
   SusanEdgeSecondLoop Sesl1(bp,input,x_size,y_size,r,mid,0,22);
   SusanEdgeSecondLoop Sesl2(bp,input,x_size,y_size,r,mid,1,22);
   SusanEdgeSecondLoop Sesl3(bp,input,x_size,y_size,r,mid,2,22);
-  SusanEdgeSecondLoopLast Sesl4(bp,input,x_size,y_size,r,mid,3,21);
+  SusanEdgeSecondLoop Sesl4(bp,input,x_size,y_size,r,mid,3,21);
+
   void main(void)
   {
   //receive in and bp here
@@ -575,29 +328,24 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
   memset (mid,100,x_size * y_size);//this is from susan.c main()
 //original
   memset (r,0,x_size * y_size * sizeof(int));
-  //Fist data parallel appplication
+  //First data parallel appplication
   par{
     Sefl1.main();
     Sefl2.main();
     Sefl3.main();
     Sefl4.main();
   }
-  memcpy(r,r1,76*22* sizeof(int));
-  memcpy(&r[76*22],r2,76*22* sizeof(int));
-  memcpy(&r[2*76*22],r3,76*22* sizeof(int));
-  memcpy(&r[3*76*22],r4,76*23* sizeof(int));
- 
+//  memcpy(r,r1,76*22* sizeof(int));
+//  memcpy(&r[76*22],r2,76*22* sizeof(int));
+//  memcpy(&r[2*76*22],r3,76*22* sizeof(int));
+//  memcpy(&r[3*76*22],r4,76*23* sizeof(int));
+  //second data parallel appplication
   par{
     Sesl1.main();
     Sesl2.main();
     Sesl3.main();
     Sesl4.main();
   }
-//  memcpy(mid,mid1,76*22);
-//  memcpy(&mid[76*22],mid2,76*22);
-//  memcpy(&mid[2*76*22],mid3,76*22);
-//  memcpy(&mid[3*76*22],mid4,76*21);
-
 
   //do not need to send bp anymore
   ToThin.send(input,7220);
