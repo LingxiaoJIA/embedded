@@ -11,13 +11,8 @@ typedef  unsigned char uchar;
 behavior Design(i_receive start, i_receiver stimulusQueue, i_sender dHSWriteToMonitor)
 {
 
-	const unsigned long readSusanSize = 7220;
-	const unsigned long susanWriteSize = 7220;
-
-
-//	c_double_handshake doubleHandToMonitor;
-	c_queue queueReadToSusan(readSusanSize);
-	c_queue queueSusanToWrite(susanWriteSize);
+	c_queue queueReadToSusan(7220ul);
+	c_queue queueSusanToWrite(7220ul);
 
 	ReadImage read_image(start, stimulusQueue, queueReadToSusan);
 	Susan susan(queueReadToSusan, queueSusanToWrite);
@@ -34,13 +29,3 @@ behavior Design(i_receive start, i_receiver stimulusQueue, i_sender dHSWriteToMo
 	}
 };
 
-//self test
-/*
-behavior Main(void)
-{
-	int void main(void)
-	{
-		
-	}
-};
-*/

@@ -2,34 +2,12 @@
 #include <string.h>
 import "c_queue";
 
-typedef  unsigned char uchar;
-
-//receive r, mid
-//send mid
-behavior SusanThinSub(in int r[7220], in uchar mid[7220], in int id, i_sender Subout)
-{
-int   l[9], centre, nlinks, npieces,
-      b01, b12, b21, b10,
-      p1, p2, p3, p4,
-      b00, b02, b20, b22,
-      m, n, a, b, x, y, i, j;
-int x_size = 76;
-int y_size = 95;
-
-int r[76*95];
-uchar mid[76*95];
-
-uchar *mp;
-
-
-};
-
+typedef unsigned char uchar;
 
 behavior SusanThin(i_receiver Portin,i_sender Portout)
 {
 void main (void)
 {
-/*
 int   l[9], centre, nlinks, npieces,
       b01, b12, b21, b10,
       p1, p2, p3, p4,
@@ -38,21 +16,19 @@ int   l[9], centre, nlinks, npieces,
 int x_size = 76;
 int y_size = 95;
 
+uchar input[76*95];
 int r[76*95];
 uchar mid[76*95];
 
 uchar *mp;
-*/
-
-int r[76*95];
-uchar mid[76*95];
 
 //receive the r and mid
 
+  Portin.receive(input,7220);
   Portin.receive(mid, 7220);//implementation
   Portin.receive(r, 7220*sizeof(int));//implementation
 
-  //for (i=4;i<y_size-4;i++)
+  for (i=4;i<y_size-4;i++)
     for (j=4;j<x_size-4;j++)
       if (mid[i*x_size+j]<8)
       {
@@ -247,6 +223,7 @@ uchar mid[76*95];
 /* }}} */
       }
   //send mid out
+  Portout.send(input,7220);
   Portout.send(mid, 7220);
 }//main
 };

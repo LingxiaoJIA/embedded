@@ -16,38 +16,37 @@ unsigned char input[7220];
 int x_size = 76, y_size = 95;
 void main(void)
 {
-    //while(true)
-    //{
-    sim_time time;
-    sim_time_string buf,buf_total;
-    const char *time_end_string;
-    long long time_end,time_total;
+    while(true) {
+      sim_time time;
+      sim_time_string buf,buf_total;
+      const char *time_end_string;
+      long long time_end,time_total;
 
-    Port.receive(input,x_size*y_size);
+      Port.receive(input,x_size*y_size);
 
-    #ifdef FOPENB
-      if ((fd=fopen(filename,"wb")) == NULL) 
-    #else
-      if ((fd=fopen(filename,"w")) == NULL) 
-    #endif
-      exit_error("Can't output image%s.\n",filename);
+      #ifdef FOPENB
+        if ((fd=fopen(filename,"wb")) == NULL) 
+      #else
+        if ((fd=fopen(filename,"w")) == NULL) 
+      #endif
+        exit_error("Can't output image%s.\n",filename);
 
-    fprintf(fd,"P5\n");
-    fprintf(fd,"%d %d\n", x_size, y_size);
-    fprintf(fd,"255\n");
-  
-
-    time=now();
-    time_end_string=time2str(buf, time);
-    time_end=str2ll(10,time_end_string);
-    time_total= time_end - time_start;    
-    printf("\nThe time is now: %s\n", ll2str(10,buf_total,time_total));
+      fprintf(fd,"P5\n");
+      fprintf(fd,"%d %d\n", x_size, y_size);
+      fprintf(fd,"255\n");
     
-    if (fwrite(input, x_size*y_size, 1, fd) != 1)
-      exit_error("Can't write image %s.\n",filename);
 
-   fclose(fd);
-   //}//while true
+      time=now();
+      time_end_string=time2str(buf, time);
+      time_end=str2ll(10,time_end_string);
+      time_total= time_end - time_start;    
+      printf("\nThe time is now: %s\n", ll2str(10,buf_total,time_total));
+      
+      if (fwrite(input, x_size*y_size, 1, fd) != 1)
+        exit_error("Can't write image %s.\n",filename);
+
+     fclose(fd);
+   }//while true
 }//main
 };
 
