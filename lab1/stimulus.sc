@@ -90,8 +90,8 @@ behavior Stimulus(i_send Start, i_bit64_sender InputBuffer,out long long time_st
       exit_error("Image %s is wrong size.\n", filename);
 
     fclose(fd);
-
-    while(k<100) {
+    for (tmp = 0; tmp < 100; ++tmp) {
+    // while(true) {
       waitfor(1000);  //wait for 1000 units before sending start signal.
       Start.send();
       for(j=0;j<7220;j++)
@@ -102,7 +102,6 @@ behavior Stimulus(i_send Start, i_bit64_sender InputBuffer,out long long time_st
       time=now();
       time_start_string=time2str(buf,time);
       time_start=str2ll(10,time_start_string);
-      k++;
     }
   }
 

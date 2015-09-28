@@ -40,7 +40,7 @@ void main(void)
       time_end_string=time2str(buf, time);
       time_end=str2ll(10,time_end_string);
       time_total= time_end - time_start;    
-      printf("\nThe time is now: %s\n", ll2str(10,buf_total,time_total));
+      printf("\nThe total delay is: %s\n", ll2str(10,buf_total,time_total));
       
       if (fwrite(input, x_size*y_size, 1, fd) != 1)
         exit_error("Can't write image %s.\n",filename);
