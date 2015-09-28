@@ -32,9 +32,15 @@
 *.dSYM/
 
 # Vim swap files
+*~
 *.sw[op]
 
 # tar ball
 *.tar.gz
-*~
+
+# intermediate files
+*.sir
+*.si
+*.cc
+*.h
 
