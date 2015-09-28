@@ -48,34 +48,15 @@ behavior SetupBrightnessLut(i_tranceiver Port)
 //uchar mid[x_size*y_size];
 //int max_no_edges=2650;
 
-
-behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
+behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*95],in int thread,in int thread_size)
 {
-  float z;
-  int   do_symmetry, i, j, m, n, a, b, x, y, w;
-  uchar c,*p,*cp;
-  int x_size = 76;
-  int y_size = 95;
-//receive in, bp
-  uchar input[76 * 95];//use port to receive and store in the in[]
-  uchar bp[516];
-
-  int r[76 * 95];
-  uchar mid[76*95];
+  int i,j,n;
+  uchar *p,*cp;
   int	max_no=2650;
 
-
-  
   void main(void)
-  {
-  //receive in and bp here
-  FromBrightness.receive(input,7220);
-  FromBrightness.receive(bp,516);
-  memset (mid,100,x_size * y_size);//this is from susan.c main()
-//original
-  memset (r,0,x_size * y_size * sizeof(int));
-
-  for (i=3;i<y_size-3;i++)
+  {  
+   for (i=3+22*thread;i<22*thread+thread_size+3;i++)
     for (j=3;j<x_size-3;j++)
     {
       n=100;
@@ -135,8 +116,20 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
       if (n<=max_no)
         r[i*x_size+j] = max_no - n;
     }
+  }
+};
 
-  for (i=4;i<y_size-4;i++)
+behavior SusanEdgeSecondLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,in int r[76*95],out uchar mid[76*95],in int thread,in int thread_size)
+{
+  float z;
+  int do_symmetry,i,j,m,n,x,y,a,b,w;
+  uchar *p,*cp;
+  uchar c;
+  int	max_no=2650;
+
+  void main(void)
+  {
+    for (i=4+22*thread;i<22*thread+thread_size+4;i++)
     for (j=4;j<x_size-4;j++)
     {
       if (r[i*x_size+j]>0)
@@ -296,7 +289,64 @@ behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
             mid[i*x_size+j] = 2;	
         }
       }
-    }	
+    }
+  }
+};
+
+behavior SusanEdges(i_receiver FromBrightness, i_sender ToThin)
+{
+  float z;
+  int   do_symmetry, i, j, m, n, a, b, x, y, w;
+  uchar c,*p,*cp;
+  int x_size = 76;
+  int y_size = 95;
+//receive in, bp
+  uchar input[76 * 95];//use port to receive and store in the in[]
+  uchar bp[516];
+
+  int r[76 * 95];
+  uchar mid[76*95];
+  int	max_no=2650;
+ 
+  //SusanEdgesFirstLoop(bp,input,x_size,y_size,r,thread,thread_size); 
+  SusanEdgesFirstLoop Sefl1(bp,input,x_size,y_size,r,0,22);
+  SusanEdgesFirstLoop Sefl2(bp,input,x_size,y_size,r,1,22);
+  SusanEdgesFirstLoop Sefl3(bp,input,x_size,y_size,r,2,22);
+  SusanEdgesFirstLoop Sefl4(bp,input,x_size,y_size,r,3,23);  
+
+  //SusanEdgeSecondLoop(bp,input,x_size,y_size,r,mid,thread,thread_size)
+  SusanEdgeSecondLoop Sesl1(bp,input,x_size,y_size,r,mid,0,22);
+  SusanEdgeSecondLoop Sesl2(bp,input,x_size,y_size,r,mid,1,22);
+  SusanEdgeSecondLoop Sesl3(bp,input,x_size,y_size,r,mid,2,22);
+  SusanEdgeSecondLoop Sesl4(bp,input,x_size,y_size,r,mid,3,21);
+
+  void main(void)
+  {
+  //receive in and bp here
+  FromBrightness.receive(input,7220);
+  FromBrightness.receive(bp,516);
+  memset (mid,100,x_size * y_size);//this is from susan.c main()
+//original
+  memset (r,0,x_size * y_size * sizeof(int));
+  //First data parallel appplication
+  par{
+    Sefl1.main();
+    Sefl2.main();
+    Sefl3.main();
+    Sefl4.main();
+  }
+//  memcpy(r,r1,76*22* sizeof(int));
+//  memcpy(&r[76*22],r2,76*22* sizeof(int));
+//  memcpy(&r[2*76*22],r3,76*22* sizeof(int));
+//  memcpy(&r[3*76*22],r4,76*23* sizeof(int));
+  //second data parallel appplication
+  par{
+    Sesl1.main();
+    Sesl2.main();
+    Sesl3.main();
+    Sesl4.main();
+  }
+
   //do not need to send bp anymore
   ToThin.send(input,7220);
   ToThin.send(mid,7220);
