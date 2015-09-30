@@ -61,11 +61,15 @@ behavior EdgeDraw(i_bit64_receiver Portin, i_bit64_sender Portout)
   uchar input[76*95];
   uchar mid[76*95];
 
-  EdgeDrawWhite w0(input, mid, 0, 2);
-  EdgeDrawWhite w1(input, mid, 1, 2);
+  EdgeDrawWhite w0(input, mid, 0, 4);
+  EdgeDrawWhite w1(input, mid, 1, 4);
+  EdgeDrawWhite w2(input, mid, 2, 4);
+  EdgeDrawWhite w3(input, mid, 3, 4);
 
-  EdgeDrawBlack b0(input, mid, 0, 2);
-  EdgeDrawBlack b1(input, mid, 1, 2);
+  EdgeDrawBlack b0(input, mid, 0, 4);
+  EdgeDrawBlack b1(input, mid, 1, 4);
+  EdgeDrawBlack b2(input, mid, 2, 4);
+  EdgeDrawBlack b3(input, mid, 3, 4);
 
   void main(void)
   {
@@ -86,10 +90,14 @@ behavior EdgeDraw(i_bit64_receiver Portin, i_bit64_sender Portout)
     par {
       w0;
       w1;
+      w2;
+      w3;
     }
     par {
       b0;
       b1;
+      b2;
+      b3;
     }
 
     for(k=0;k<7220;k++){
