@@ -53,7 +53,8 @@ behavior SetupBrightnessLut(i_bit64_sender Port)
 //uchar mid[x_size*y_size];
 //int max_no_edges=2650;
 
-behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,out int r[76*95],in int thread,in int thread_size)
+behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,
+    out int r[76*95],in int thread,in int thread_size)
 {
   int i,j,n;
   uchar *p,*cp;
@@ -124,7 +125,8 @@ behavior SusanEdgesFirstLoop(in uchar bp[516],in uchar input[76*95],in int x_siz
   }
 };
 
-behavior SusanEdgeSecondLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,in int r[76*95],out uchar mid[76*95],in int thread,in int thread_size)
+behavior SusanEdgeSecondLoop(in uchar bp[516],in uchar input[76*95],in int x_size,in int y_size,
+    in int r[76*95],out uchar mid[76*95],in int thread,in int thread_size)
 {
   float z;
   int do_symmetry,i,j,m,n,x,y,a,b,w;
