@@ -1,3 +1,4 @@
+////////////part A&B/////////
 prune functions and variables and only remain the useful functions for the edge functions listed below:
 get_image(filename,in,x_size,y_size)
 setup_brightness_lut(bp,thresh,form)
@@ -23,3 +24,40 @@ DetectEdges detect_edges(Port_stimulus, c_Edgesout);
 susan_thin(r,mid,x_size,y_size);--->susan_thin(c_Thinin, c_Thinout);
 edge_draw(in,mid,x_size,y_size,drawing_mode);--->edge_draw(c_Drawin, Port_monitor);
 //c_Edgesout, c_Thinin, c_Thinout, c_Drawin are all c_queue channel
+
+////////part C&D///////////
+The list of the behaviors
+behavior Design
+behavior DetectEdges
+behavior DetectEdgesFSM
+behavior EdgeDraw
+behavior EdgeDrawBlack
+behavior EdgeDrawWhite
+behavior EdgeDrawFSM
+behavior Main
+behavior Monitor
+behavior ReadImage
+behavior SetupBrightnessLut
+behavior Stimulus
+behavior Susan
+behavior SusanEdgeSecondLoop
+behavior SusanEdges
+behavior SusanEdgesFirstLoop
+behavior SusanThin
+behavior SusanThinFSM
+behavior WriteImage
+
+The top behavior is Main, which contains Stimulus, Design and Monitor. 
+Design contains ReadImage, Susan and WriteImage. 
+Susan contains DetectEdgesFSM, SusanThinFSM and EdgeDrawFSM.
+DetectEdgesFSM contains DetectEdges.
+SusanThinFSM contains SusanThin.
+EdgeDrawFSM contains EdgeDraw.
+DetectEdges contains SetupBrightnessLut and SusanEdges.
+EdgeDrawBlack, EdgeDrawWhite, SusanEdgesFirstLoop and SusanEdgeSecondLoop are used to apply data parallel implementation.
+
+The commands of MAKEFILE:
+% make   //To compile all files
+% make test  //Run susan_edge_detector.sc and compare results with gold file.  
+% make par   //Run parallel version of the test
+% make list  //list all the behaviors, channels and interface that used.
