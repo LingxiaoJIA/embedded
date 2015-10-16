@@ -19,6 +19,7 @@ behavior SetupBrightnessLutThread(uchar bp[516], in int thID)
                 temp=temp*temp*temp;
             temp=100.0*exp(-temp);
             bp[(k+258)] = (uchar) temp;
+            waitfor(2700);
         }
     }
 

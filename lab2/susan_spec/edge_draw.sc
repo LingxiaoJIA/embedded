@@ -26,6 +26,7 @@ behavior EdgeDrawThread_PartA(uchar image_buffer[7220], uchar mid[7220], in int 
                     *inp++=255; *inp++=255; *inp=255;
                 }
                 midp++;
+                waitfor(600000);
             }
         }
      }   
@@ -52,6 +53,7 @@ behavior EdgeDrawThread_PartB(uchar image_buffer[7220], uchar mid[7220], in int 
             if (*midp<8) 
                 *(image_buffer+ (midp - mid)) = 0;
             midp++;
+            waitfor(600000);
         }
     }
     

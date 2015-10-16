@@ -15,13 +15,13 @@ behavior SusanThinThread(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], in int thID)
         uchar *mp;
 
 
-	    for (i=4+(Y_SIZE-4-4)/PROCESSORS*thID; i<4+(Y_SIZE-4-4)/PROCESSORS*(thID+1) + (thID+1==PROCESSORS && (Y_SIZE-4-4)%PROCESSORS!=0 ? (Y_SIZE-4-4)%PROCESSORS : 0); i++)         		          
+	    for (i=4+(Y_SIZE-4-4)/PROCESSORS*thID; i<4+(Y_SIZE-4-4)/PROCESSORS*(thID+1) + (thID+1==PROCESSORS && (Y_SIZE-4-4)%PROCESSORS!=0 ? (Y_SIZE-4-4)%PROCESSORS : 0); i++) {
         //for (i=4;i<Y_SIZE-4;i++)
             for (j=4;j<X_SIZE-4;j++)
                 if (mid[i*X_SIZE+j]<8)
                 {
                     centre = r[i*X_SIZE+j];
-                    /* {{{ count number of neighbours */
+                    /* count number of neighbours */
 
                     mp=mid + (i-1)*X_SIZE + j-1;
 
@@ -34,12 +34,11 @@ behavior SusanThinThread(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], in int thID)
                         (*(mp+X_SIZE+X_SIZE+1)<8) +
                         (*(mp+X_SIZE+X_SIZE+2)<8);
 
-                     /* }}} */
-                    /* {{{ n==0 no neighbours - remove point */
+                    /* n==0 no neighbours - remove point */
                     if (n==0)
                     mid[i*X_SIZE+j]=100;
-                    /* }}} */
-                    /* {{{ n==1 - extend line if I can */
+                    /* */
+                    /* n==1 - extend line if I can */
                     /* extension is only allowed a few times - the value of mid is used to control this */
 
                     if ( (n==1) && (mid[i*X_SIZE+j]<6) )
@@ -130,7 +129,6 @@ behavior SusanThinThread(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], in int thID)
                             b12 = mid[(i  )*X_SIZE+j+1]<8;
                             b21 = mid[(i+1)*X_SIZE+j  ]<8;
                             b10 = mid[(i  )*X_SIZE+j-1]<8;
-                            /* {{{ right angle ends - not currently used */
 
 #ifdef IGNORETHIS
                             if ( (b00&b01)|(b00&b10)|(b02&b01)|(b02&b12)|(b20&b10)|(b20&b21)|(b22&b21)|(b22&b12) )
@@ -198,6 +196,8 @@ behavior SusanThinThread(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], in int thID)
                         }
                     }
                 } 
+            waitfor(180000);
+        }
     }                
 };
 
@@ -219,12 +219,12 @@ behavior SusanThin_WriteOutput(i_uchar7220_sender out_mid, uchar mid[IMAGE_SIZE]
 
 behavior SusanThin(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])
 {
- 
+
     SusanThinThread susan_thin_thread_0(r, mid, 0);
     SusanThinThread susan_thin_thread_1(r, mid, 1);
-    
+
     void main(void) {        
-       par {
+        par {
             susan_thin_thread_0;
             susan_thin_thread_1;
         }                   
