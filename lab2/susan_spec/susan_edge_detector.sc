@@ -18,14 +18,13 @@ behavior Main
     Stimulus stimulus(start, image_buffer, start_time);
     Design design(start, image_buffer, out_image);
     Monitor monitor(out_image, start_time);
-    
+
     int main(void) {
         par {
             stimulus;
             design;
             monitor;
         }
-        
         return 0;
     }
 

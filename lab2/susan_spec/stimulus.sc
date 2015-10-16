@@ -84,14 +84,14 @@ behavior Stimulus(i_send start, inout uchar  image_buffer[IMAGE_SIZE], i_sender 
 
         sprintf(filename, "%s", "input_small.pgm");
         get_image(filename, image_buffer);
-	for(n = 0; n < NR_IMGS; n++) {
-	        printf("Starting process %d...\n", n+1);
-                start.send();
-	        start_time = now();
-		start_time_channel.send(&start_time, sizeof(sim_time));
-	        waitfor(1000);
-	}       
-    
+        for(n = 0; n < NR_IMGS; n++) {
+            printf("Starting process %d...\n", n+1);
+            start.send();
+            start_time = now();
+            start_time_channel.send(&start_time, sizeof(sim_time));
+            waitfor(1000);
+        }       
+
     }
 
 };
