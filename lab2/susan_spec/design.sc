@@ -6,13 +6,12 @@ import "pe2";
 import "output";
 import "c_uchar7220_queue";
 
-
 behavior Design(i_receive start, in uchar image_buffer[IMAGE_SIZE], i_sender out_image_susan)
 {
 
     c_uchar7220_queue in_image(1ul);
     c_uchar7220_queue out_image(1ul);
-    
+
     c_int7220_queue r(1ul);
     c_uchar7220_queue mid(1ul);
     c_uchar7220_queue image_edge_draw(1ul);
