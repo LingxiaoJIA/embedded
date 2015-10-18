@@ -15,6 +15,8 @@ typedef struct Task {
 
 interface OSAPI
 {
+    int getNumCreated();
+    void print();
     /* OS management */
     void init();
     void start();

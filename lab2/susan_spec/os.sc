@@ -14,7 +14,7 @@ import "osapi";
 
 channel OS implements OSAPI {
     int NumCreated = 0;
-    c_handshake e0, e1, e2, e3, e4, e5, e6, e7, e8, e9;
+    c_handshake e1, e2, e3, e4, e5, e6, e7, e8, e9, e10;
     Task tasks[NUMTHREADS];
     Task *RunPt = 0;
     Task *NextPt = 0;
@@ -23,11 +23,18 @@ channel OS implements OSAPI {
     // os_queue rdyq;
 
     /* helper function */
+    int getNumCreated() {
+        return NumCreated;
+    }
     void Remove(Task **listPt){
         if (*listPt == 0) return;
-        if ((*listPt)->prev == 0 && (*listPt)->next == 0) return;
+        if ((*listPt)->next == (*listPt)) {
+            *listPt = 0;
+            return;
+        }
         (*listPt)->prev->next = (*listPt)->next;
         (*listPt)->next->prev = (*listPt)->prev;
+        *listPt = (*listPt)->prev;
     }
 
     void Insert(Task *listPt, Task *currPt){
@@ -37,21 +44,60 @@ channel OS implements OSAPI {
         listPt->prev = currPt;
     }
 
+    void os_wait(int id) {
+        switch (id) {
+            case 1: e1.receive(); break;
+            case 2: e2.receive(); break;
+            case 3: e3.receive(); break;
+            case 4: e4.receive(); break;
+            case 5: e5.receive(); break;
+            case 6: e6.receive(); break;
+            case 7: e7.receive(); break;
+            case 8: e8.receive(); break;
+            case 9: e9.receive(); break;
+            case 10: e10.receive(); break;
+            default: break;
+        }
+    }
+
+    void os_notify(int id) {
+        switch (id) {
+            case 1: e1.send(); break;
+            case 2: e2.send(); break;
+            case 3: e3.send(); break;
+            case 4: e4.send(); break;
+            case 5: e5.send(); break;
+            case 6: e6.send(); break;
+            case 7: e7.send(); break;
+            case 8: e8.send(); break;
+            case 9: e9.send(); break;
+            case 10: e10.send(); break;
+            default: break;
+        }
+    }
+
     void dispatch(void) {
-    /*
-        current = schedule(rdyq);
-        if(current)
-            notify(current.event);
-    */
+        RunPt = NextPt;
+        NextPt = RunPt->next;
+        os_notify(RunPt->id);
     }
 
     void yield() {
-    /*
-        task = current;
-        rdyq.insert(task);
+        Task *currPt;
+        currPt = RunPt;
         dispatch();
-        wait(task.event);
-    */
+        os_wait(currPt->id);
+    }
+
+    void print() {
+        Task *temp;
+        if (RunPt == 0) return;
+        temp = RunPt->next;
+        while (temp != RunPt) {
+            printf("%d\n", temp->id);
+            temp = temp->next;
+        }
+        printf("%d\n", temp->id);
     }
 
     /* OS management */
@@ -76,14 +122,6 @@ channel OS implements OSAPI {
         NumCreated++;
         currPt = &tasks[idx];
         currPt->id = idx+1;
-        return currPt;
-    }
-
-    void task_terminate() {
-
-    }
-
-    void task_activate(Task *currPt) {
         if (RunPt == 0) {
             RunPt = currPt;
             RunPt->prev = RunPt->next = RunPt;
@@ -91,15 +129,43 @@ channel OS implements OSAPI {
             Insert(RunPt, currPt);
         }
         NextPt = RunPt->next;
+        return currPt;
+    }
+
+    void task_terminate() {
+        Task *currPt;
+        currPt = RunPt;
+        Remove(&RunPt);
+        if (currPt) {
+            currPt->id = 0;
+            NumCreated--;
+        }
+        if (RunPt) dispatch();
+    }
+
+    void task_activate(Task *currPt) {
+        os_wait(currPt->id);
     }
 
     Task* par_start() {
         Task *currPt;
+        currPt = RunPt;
+        Remove(&RunPt);
+        if (currPt) {
+            NumCreated--;
+        }
+        if (RunPt) dispatch();
         return currPt;
     }
 
-    void par_end(Task *t) {
-
+    void par_end(Task *currPt) {
+        if (RunPt == 0) {
+            RunPt = currPt;
+            RunPt->prev = RunPt->next = RunPt;
+        } else {
+            Insert(RunPt, currPt);
+        }
+        NumCreated++;
     }
 
     /* Event handling */
