@@ -11,18 +11,20 @@ import "c_uchar7220_queue";
 import "c_int7220_queue";
 
 import "detect_edges";
-     
+import "os";
+
 behavior PE1(i_uchar7220_receiver in_image,  i_int7220_sender out_r, i_uchar7220_sender out_mid, i_uchar7220_sender out_image)
 {
+    OS os;
+    Edges edges(in_image, out_r, out_mid, out_image, os);
 
-    Edges edges(in_image, out_r, out_mid, out_image);
-        
     void main(void)
     {
-        edges;
+        os.init();
+        edges.main();
     }
-   
-};   
+
+};
 
 
 

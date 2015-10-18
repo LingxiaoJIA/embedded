@@ -14,7 +14,7 @@ behavior Main
     uchar image_buffer[IMAGE_SIZE];
     c_double_handshake_signal start;
     c_double_handshake out_image;
-    
+
     Stimulus stimulus(start, image_buffer, start_time);
     Design design(start, image_buffer, out_image);
     Monitor monitor(out_image, start_time);

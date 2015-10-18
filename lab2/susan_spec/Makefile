@@ -10,7 +10,7 @@ RM  = rm -f
 
 SCFILES = 	c_uchar7220_queue.sc c_int7220_queue.sc\
         setup_brightness_lut.sc susan_edges.sc detect_edges.sc susan_thin.sc edge_draw.sc read_image.sc input.sc\
-		write_image.sc output.sc pe1.sc pe2.sc design.sc stimulus.sc monitor.sc design.sc susan_edge_detector.sc
+		write_image.sc output.sc init.sc osapi.sc os.sc pe1.sc pe2.sc stimulus.sc monitor.sc design.sc susan_edge_detector.sc
 
 SIRFILES = $(SCFILES:.sc=.sir)
 
