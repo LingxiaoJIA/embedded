@@ -8,7 +8,7 @@ behavior SetupBrightnessLutThread(uchar bp[516], in int thID, OSAPI os) implemen
     Task *task;
 
     void init(void) {
-        task = os.task_create("sbl_t"); 
+        task = os.task_create("sbl_t");
     }
 
     void main(void) {
@@ -44,11 +44,12 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
     SetupBrightnessLutThread setup_brightness_thread_1(bp, 1, os);
 
     void init(void) {
-        task = os.task_create("sbl"); 
+        task = os.task_create("sbl");
     }
 
     void main(void) {
 
+        printf("# of threads: %d\n", os.getNumCreated());
         init();
         printf("# of threads: %d\n", os.getNumCreated());
 
@@ -56,7 +57,6 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
         setup_brightness_thread_1.init();
         printf("# of threads: %d\n", os.getNumCreated());
 
-        os.start();
         task = os.par_start();
         par {
             setup_brightness_thread_0;

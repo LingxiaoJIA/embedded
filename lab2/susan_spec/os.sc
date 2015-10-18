@@ -26,6 +26,18 @@ channel OS implements OSAPI {
     int getNumCreated() {
         return NumCreated;
     }
+
+    void print() {
+        Task *temp;
+        if (RunPt == 0) return;
+        temp = RunPt->next;
+        while (temp != RunPt) {
+            printf("%d\n", temp->id);
+            temp = temp->next;
+        }
+        printf("%d\n", temp->id);
+    }
+
     void Remove(Task **listPt){
         if (*listPt == 0) return;
         if ((*listPt)->next == (*listPt)) {
@@ -87,17 +99,6 @@ channel OS implements OSAPI {
         currPt = RunPt;
         dispatch();
         os_wait(currPt->id);
-    }
-
-    void print() {
-        Task *temp;
-        if (RunPt == 0) return;
-        temp = RunPt->next;
-        while (temp != RunPt) {
-            printf("%d\n", temp->id);
-            temp = temp->next;
-        }
-        printf("%d\n", temp->id);
     }
 
     /* OS management */
