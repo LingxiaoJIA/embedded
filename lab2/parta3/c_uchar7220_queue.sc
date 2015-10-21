@@ -1,7 +1,7 @@
 //#include <c_typed_queue.sh>	/* make the template available */
 //import "c_typed_queue.sh";
 
-import "os1";
+import "os";
 
 #ifndef I_TYPED_SENDER_SH
 #define I_TYPED_SENDER_SH
@@ -64,7 +64,6 @@ extern void *memcpy(void*, const void*, unsigned int);
 //#include <i_typed_sender.sh>
 //#include <i_typed_receiver.sh>
 //#include <i_typed_tranceiver.sh>
-import "os1";
 
 #define DEFINE_C_TYPED_QUEUE(typename, type, OSAPI)			\
 									\

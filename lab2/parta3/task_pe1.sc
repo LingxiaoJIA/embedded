@@ -9,8 +9,8 @@ import "c_uchar7220write_queue";
 import "detect_edges";
 import "susan_thin";
 import "edge_draw";
-import "os1";
-     
+import "os";
+
 behavior TASK_PE1(i_uchar7220read_receiver in_image, i_uchar7220write_sender out_image, OSAPI os) implements Init
 {
     c_int7220_queue r(1ul, os);
@@ -23,32 +23,28 @@ behavior TASK_PE1(i_uchar7220read_receiver in_image, i_uchar7220write_sender out
     Draw draw(image_edge_draw, mid_edge_draw, out_image, os);
 
 	Task *task;
-        
+
     void init(void) {
         task = os.task_create("pe1");
     }
-	
-	//task_pe1
-	
+
 
     void main(void)
     {
-	//Task *task;
-	init();
-	edges.init();
-	thin.init();
-	draw.init();
-	
-	task=os.par_start();
-	par{
+        init();
+        edges.init();
+        thin.init();
+        draw.init();
+
+        task=os.par_start();
+        par{
             edges;
             thin;
             draw;
-	}
-	os.par_end(task);
-	
-	os.task_terminate();
+        }
+        os.par_end(task);
+
+        os.task_terminate();
     }
-   
-};   
+};
 

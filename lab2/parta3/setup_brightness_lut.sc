@@ -1,27 +1,27 @@
 #include "susan.sh"
-import "os1";
+import "os";
 import "init";
 
 behavior SetupBrightnessLutThread(uchar bp[516], in int thID, OSAPI os) implements Init
 {
-       Task *task;
+    Task *task;
 
-	void init(void) {
+    void init(void) {
         task = os.task_create("sbl_t");
-    	}
+    }
 
 
     void main(void) {
         int   k;
         float temp;
         int thresh, form;
-        
+
         thresh = BT;
         form = 6;
 
         os.task_activate(task);
         //for(k=-256;k<257;k++)
-       for(k=(-256)+512/PROCESSORS*thID; k<(-256)+512/PROCESSORS*thID+512/PROCESSORS+1; k++){
+        for(k=(-256)+512/PROCESSORS*thID; k<(-256)+512/PROCESSORS*thID+512/PROCESSORS+1; k++){
             //waitfor(2700);  //insertion for the timing based on the performance profiling
             temp=((float)k)/((float)thresh);
             temp=temp*temp;
@@ -36,7 +36,7 @@ behavior SetupBrightnessLutThread(uchar bp[516], in int thID, OSAPI os) implemen
     }
 
 };
- 
+
 behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
 {
     Task *task;
@@ -46,21 +46,18 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
     void init(void) {
         task = os.task_create("sbl");
     }
-       
+
     void main(void) {
-//	init();
 
         setup_brightness_thread_0.init();
         setup_brightness_thread_1.init();
 
-       task = os.par_start();	
+        task = os.par_start();
         par {
             setup_brightness_thread_0;
             setup_brightness_thread_1;
         }
         os.par_end(task);
-
-
     }
 };
 

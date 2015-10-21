@@ -14,8 +14,8 @@ behavior ReadImage(i_receive start, in uchar image_buffer[IMAGE_SIZE], i_uchar72
             start.receive();
             for (i=0; i<IMAGE_SIZE; i++)
                 image_buffer_out[i] = image_buffer[i];
-            out_image.send(image_buffer_out);       
+            out_image.send(image_buffer_out);
         }
     }
-         
-}; 
+
+};

@@ -8,7 +8,6 @@ import "i_sender";
 
 behavior Stimulus(i_send start, inout uchar  image_buffer[IMAGE_SIZE], i_sender start_time_channel)
 {
-
     int getint(FILE *fd)
     {
         int c, i;
@@ -45,7 +44,7 @@ behavior Stimulus(i_send start, inout uchar  image_buffer[IMAGE_SIZE], i_sender 
         FILE  *fd;
         char header [100];
         int  x_size, y_size, tmp;
-       
+
 
 #ifdef FOPENB
         if ((fd=fopen(filename,"rb")) == NULL)
@@ -69,14 +68,13 @@ behavior Stimulus(i_send start, inout uchar  image_buffer[IMAGE_SIZE], i_sender 
             fclose (fd);
             exit(1);
         }
-      
+
         if (fread(image, 1, X_SIZE * Y_SIZE, fd) == 0)
             exit_error("Image %s is wrong size.\n",filename);
        fclose(fd);
     }
 
-
-    void main(void) 
+    void main(void)
     {
         unsigned int n;
         char filename[100];
@@ -84,14 +82,12 @@ behavior Stimulus(i_send start, inout uchar  image_buffer[IMAGE_SIZE], i_sender 
 
         sprintf(filename, "%s", "input_small.pgm");
         get_image(filename, image_buffer);
-	for(n = 0; n < NR_IMGS; n++) {
-	        printf("Starting process %d...\n", n+1);
-                start.send();
-	        start_time = now();
-		start_time_channel.send(&start_time, sizeof(sim_time));
-	        waitfor(1000);
-	}       
-    
+        for(n = 0; n < NR_IMGS; n++) {
+            printf("Starting process %d...\n", n+1);
+            start.send();
+            start_time = now();
+            start_time_channel.send(&start_time, sizeof(sim_time));
+            waitfor(1000);
+        }
     }
-
 };

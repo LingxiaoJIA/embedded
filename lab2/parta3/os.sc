@@ -1,278 +1,243 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <sim.sh>
-#include "susan.sh"
+/**********************************************************************
+ *  File Name:   os1.sc
+ *  Author:      lingxiao.jia
+ *  Mail:        lingxiao.jia@utexas.edu
+ *  Create Time: 2015 Oct 17 03:46:04 PM
+ **********************************************************************/
 
-#define QUEUE_SIZE 100
-typedef int Task;
+#include "susan.sh"
+import "c_handshake";
+
+#define NUMTHREADS  15
+
+typedef struct Task {
+    struct Task *next;  // linked-list pointer
+    struct Task *prev;  // point to previous task
+    char name[20];
+    int32_t id;
+} Task;
 
 interface OSAPI
 {
-	//OS management
-	void init();
-	//void start(int sched_alg);
-	//void interrupt_return(void);
+    int getNumCreated();
+    void print();
 
-	//Task management
-	Task task_create(int taskID);
-	void task_terminate();
-	void task_activate(Task t);
-	void print();
+    /* OS management */
+    void init();
+    void start();
 
-	Task par_start();	//for the threads fork
-	void par_end(Task t);	//for the threads fork
+    /* Task management */
+    Task* task_create(char *name);
+    void task_terminate();
+    void task_activate(Task *t);
 
-	//Event handling
-	Task pre_wait();
-	void post_wait(Task t);
+    Task* par_start();
+    void par_end(Task *t);
 
-	//Delay modeling
-	void time_wait(sim_time nsec);
+    /* Event handling */
+    Task* pre_wait();
+    void post_wait(Task *t);
 
+    /* Time modeling */
+    void time_wait(sim_time nsec);
 };
 
+channel OS implements OSAPI {
+    int NumCreated = 0;
+    c_handshake e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15;
+    Task tasks[NUMTHREADS];
+    Task *RunPt = 0;
+    Task *NextPt = 0;
 
-channel OS implements OSAPI
-{
-	//Task is the self-defined DS
-	Task current = -1;
-	int firstIndex = 0;	//the place that is going to get next
-	int endIndex = 0;	//the place that is going to put next
-	int i,j;
-	//Task retID = 0;
-	//os_queue is the DS based on queue
-	//os_queue rdyq, waitq;
-	Task  rdyq[100];
-	Task  waitq[100];
+    /* helper function */
+    int getNumCreated() {
+        return NumCreated;
+    }
 
-	event event00, event02,  event03, event04, event05; 
-	event event06, event07,  event08, event09, event10; 
-	event event11, event12,  event13, event14, event15; 
-	event event16, event17,  event18, event19, event20; 
-	event event21, event22,  event23, event24, event25; 
-	event event26, event27,  event28, event29, event01; 
+    void print() {
+        Task *temp;
+        if (RunPt == 0){ printf("Empty.\n"); return;}
+        temp = RunPt->next;
+        printf("WaitQ: ");
+        while (temp != RunPt) {
+            printf("%d %s ", temp->id, temp->name);
+            temp = temp->next;
+        }
+        printf("RunPt: %d %s \n", temp->id, temp->name);
+        printf("Next:%d Run:%d\n",NextPt->id,RunPt->id);
+        printf("end of queue.\n");
+    }
 
-	void init() {
+    void Remove(Task **listPt){
+        if (*listPt == 0) return;
+        if ((*listPt)->next == (*listPt)) {
+            *listPt = 0;
+            return;
+        }
+        (*listPt)->prev->next = (*listPt)->next;
+        (*listPt)->next->prev = (*listPt)->prev;
+        *listPt = (*listPt)->prev;
+    }
 
-	}
+    void Insert(Task *listPt, Task *currPt){
+        currPt->prev = listPt->prev;
+        currPt->prev->next = currPt;
+        currPt->next = listPt;
+        listPt->prev = currPt;
+    }
 
-	void print()
-	{
-		int Total_Num;
-		Total_Num=(endIndex-firstIndex)%30;
-		for(i=0;i<(Total_Num);i++){
-			j=rdyq[(firstIndex+i)%30];
-			printf("No.%d task is %d.\n",(i+1),j);
-		}
-		printf("end of queue.\n");
-	}
+    void os_wait(int id) {
+        switch (id) {
+            case 1: e1.receive(); break;
+            case 2: e2.receive(); break;
+            case 3: e3.receive(); break;
+            case 4: e4.receive(); break;
+            case 5: e5.receive(); break;
+            case 6: e6.receive(); break;
+            case 7: e7.receive(); break;
+            case 8: e8.receive(); break;
+            case 9: e9.receive(); break;
+            case 10: e10.receive(); break;
+            case 11: e11.receive(); break;
+            case 12: e12.receive(); break;
+            case 13: e13.receive(); break;
+            case 14: e14.receive(); break;
+            case 15: e15.receive(); break;
+            default: break;
+        }
+    }
 
-	//enqueue--rdyq
-	void insert(Task task)
-	{
-		if(endIndex==((firstIndex-1+QUEUE_SIZE)%QUEUE_SIZE)){
-			printf("fifo full during insert");
-		}
-		rdyq[endIndex] = task;
-		endIndex = (endIndex+1)%QUEUE_SIZE;
-	}
-	//dequeue--rdyq
-	Task remove()
-	{
-		Task task;
-		if(firstIndex == endIndex){//empty
-			printf("fifo empty during remove");	
-		}
-		task = rdyq[firstIndex];
-		//index range from 0 to 99
-		firstIndex = (firstIndex+1)%QUEUE_SIZE;
-		return task;
-	}
+    void os_notify(int id) {
+        switch (id) {
+            case 1: e1.send(); break;
+            case 2: e2.send(); break;
+            case 3: e3.send(); break;
+            case 4: e4.send(); break;
+            case 5: e5.send(); break;
+            case 6: e6.send(); break;
+            case 7: e7.send(); break;
+            case 8: e8.send(); break;
+            case 9: e9.send(); break;
+            case 10: e10.send(); break;
+            case 11: e11.send(); break;
+            case 12: e12.send(); break;
+            case 13: e13.send(); break;
+            case 14: e14.send(); break;
+            case 15: e15.send(); break;
+            default: break;
+        }
+    }
 
-	os_notify(Task task)
-	{
-		switch(task)
-		{
-			case 0: notify event00;
-			case 1: notify event01;
-			case 2: notify event02;
-			case 3: notify event03;
-			case 4: notify event04;
-			case 5: notify event05;
-			case 6: notify event06;
-			case 7: notify event07;
-			case 8: notify event08;
-			case 9: notify event09;
-			case 10: notify event10;
-			case 11: notify event11;
-			case 12: notify event12;
-			case 13: notify event13;
-			case 14: notify event14;
-			case 15: notify event15;
-			case 16: notify event16;
-			case 17: notify event17;
-			case 18: notify event18;
-			case 19: notify event19;
-			case 20: notify event20;
-			case 21: notify event21;
-			case 22: notify event22;
-			case 23: notify event23;
-			case 24: notify event24;
-			case 25: notify event25;
-			case 26: notify event26;
-			case 27: notify event27;
-			case 28: notify event28;
-			case 29: notify event29;
-			default:break;
-		}
-	}
+    void dispatch(void) {
+        RunPt = RunPt->next;
+        os_notify(RunPt->id);
+    }
 
-	os_wait(Task task)
-	{
-		switch(task)
-		{
-			case 0: wait event00;
-			case 1: wait event01;
-			case 2: wait event02;
-			case 3: wait event03;
-			case 4: wait event04;
-			case 5: wait event05;
-			case 6: wait event06;
-			case 7: wait event07;
-			case 8: wait event08;
-			case 9: wait event09;
-			case 10: wait event10;
-			case 11: wait event11;
-			case 12: wait event12;
-			case 13: wait event13;
-			case 14: wait event14;
-			case 15: wait event15;
-			case 16: wait event16;
-			case 17: wait event17;
-			case 18: wait event18;
-			case 19: wait event19;
-			case 20: wait event20;
-			case 21: wait event21;
-			case 22: wait event22;
-			case 23: wait event23;
-			case 24: wait event24;
-			case 25: wait event25;
-			case 26: wait event26;
-			case 27: wait event27;
-			case 28: wait event28;
-			case 29: wait event29;
-			default:break;
-		}
-	}
+    void yield() {
+        Task *currPt;
+        currPt = RunPt;
+        dispatch();
+        os_wait(currPt->id);
+    }
 
+    /* OS management */
+    void init() {
 
-	//Task management
-	Task task_create(int taskID)
-	{
-		Task task;
- 		task= taskID;	//give an index of a task
-		return task;
-	}
+    }
 
+    void start() {
 
-	void dispatch(void)
-	{
-		current = remove();//os_queue----function--pop
-		os_notify(current);
-	}
-	
-	//Task management
-	void task_terminate()
-	{//dispatch next in the queue
-		dispatch();
-	}
+    }
 
-	//Task management
-	void task_activate(Task t)
-	{//add to rdyq
-		insert(t);
-//		print();
-		//write events
-		os_wait(t);
-	}
+    /* Task management */
+    Task* task_create(char *name) {
+        int idx = 0;
+        Task *currPt;
+        if (NumCreated == NUMTHREADS) {     // Meet maximum number of threads
+            return 0;
+        }
+        while (tasks[idx].id != 0) {
+            idx++;
+        }
+        NumCreated++;
+        currPt = &tasks[idx];
+        currPt->id = idx+1;
+        strcpy(currPt->name, name);
+        if (RunPt == 0) {
+            RunPt = currPt;
+            RunPt->prev = RunPt->next = RunPt;
+        } else {
+            Insert(RunPt, currPt);
+        }
+        NextPt = RunPt->next;
+        return currPt;
+    }
 
-	//Task management--suspends the calling task and waits for the child tasks to finish
-	Task par_start()
-	{//for the dynamic task forking and joining
-		Task retID;
-		retID = current;
-		dispatch();
-		return retID;
-	}	
-	
-	//Task management--resumes the calling task's execution
-	void par_end(Task retID)
-	{//for the dynamic task forking and joining
-		insert(retID);
-		os_wait(retID);
-	}	
-	
-	//stop a, put it into queue and execute b, 
-	void yield()
-	{
-		Task task;
-		task = current;
-		insert(task);
-		dispatch();
-		os_wait(task);
-	}
+    void task_terminate() {
+        Task *currPt;
+        currPt = RunPt;
+        Remove(&RunPt);
+        if (currPt) {
+            currPt->id = 0;
+            NumCreated--;
+        }
+        if (RunPt) dispatch();
+    }
 
-	//model the time delay
-	void time_wait(sim_time t)
-	{
-		waitfor(t);
-		yield();
-	}
+    void task_activate(Task *currPt) {
+        os_wait(currPt->id);
+    }
 
+    Task* par_start() {
+        Task *currPt;
+        currPt = RunPt;
+        Remove(&RunPt);
+        if (currPt) {
+            NumCreated--;
+        }
+        if (RunPt) dispatch();
+        return currPt;
+    }
 
-	//enqueue--waitq
-	void w_insert(Task task)
-	{
-		if(endIndex==((firstIndex-1+QUEUE_SIZE)%QUEUE_SIZE)){
-			printf("fifo full during insert");
-		}
-		waitq[endIndex] = task;
-		endIndex = (endIndex+1)%QUEUE_SIZE;
-	}
-	//dequeue--waitq
-	Task w_remove()
-	{
-		Task task;
-		if(firstIndex == endIndex){//empty
-			printf("fifo empty during remove");	
-		}
-		task = waitq[firstIndex];
-		//index range from 0 to 99
-		firstIndex = (firstIndex+1)%QUEUE_SIZE;
-		return task;
-	}
+    void par_end(Task *currPt) {
+        if (RunPt == 0) {
+            RunPt = currPt;
+            RunPt->prev = RunPt->next = RunPt;
+        } else {
+            Insert(RunPt, currPt);
+            os_wait(currPt->id);
+        }
+        NumCreated++;
+    }
 
-	//event management
-	Task pre_wait()
-	{
-		Task task;
-		task = current;
-		insert(task);
-		dispatch();
-		return task;
-	}
+    /* Event handling */
+    Task* pre_wait() {
+        Task *currPt;
+        currPt = RunPt;
+        Remove(&RunPt);
+        if (currPt) {
+            NumCreated--;
+        }
+        if (RunPt) dispatch();
+        return currPt;
+    }
 
-	//event management
-	void post_wait(Task t)
-	{
-		os_wait(t);
-	}
+    void post_wait(Task *currPt) {
+        if (RunPt == 0) {
+            RunPt = currPt;
+            RunPt->prev = RunPt->next = RunPt;
+        } else {
+            Insert(RunPt, currPt);
+            os_wait(currPt->id);
+        }
+        NumCreated++;
+    }
 
-
+    /* Time modeling */
+    void time_wait(sim_time t) {
+        waitfor(t);
+        yield();
+    }
 };
-
-
 
 
