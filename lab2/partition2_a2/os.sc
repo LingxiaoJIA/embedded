@@ -89,8 +89,8 @@ channel OS implements OSAPI {
     }
 
     void dispatch(void) {
-        RunPt = NextPt;
-        NextPt = RunPt->next;
+        if (RunPt == 0) return;
+        RunPt = RunPt->next;
         os_notify(RunPt->id);
     }
 
@@ -129,7 +129,6 @@ channel OS implements OSAPI {
         } else {
             Insert(RunPt, currPt);
         }
-        NextPt = RunPt->next;
         return currPt;
     }
 
