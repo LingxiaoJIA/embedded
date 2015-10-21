@@ -29,5 +29,4 @@ behavior Design(i_receive start, in uchar image_buffer[IMAGE_SIZE], i_sender out
             output.main();
         }
     }
-
 };
