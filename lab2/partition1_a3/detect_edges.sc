@@ -9,16 +9,17 @@ import "init";
 
 import "c_uchar7220read_queue";
 
-behavior DetectEdges(i_uchar7220read_receiver in_image,  i_int7220_sender out_r, i_uchar7220_sender out_mid, i_uchar7220_sender out_image, OSAPI os)
+behavior DetectEdges(i_uchar7220read_receiver in_image, i_int7220_sender out_r, i_uchar7220_sender out_mid, i_uchar7220_sender out_image, OSAPI os)
 {
 
     uchar bp[516];
+    c_uchar7220_queue image_mid(1ul, os);
 
-    SetupBrightnessLut setup_brightness_lut(bp,os);
-    SusanEdges susan_edges(in_image, out_r, out_mid, bp, out_image, os);
+    SetupBright setup(in_image, image_mid, bp, os);
+    SusanEdges susan_edges(image_mid, out_r, out_mid, bp, out_image, os);
 
     void main(void) {
-        setup_brightness_lut.main();
+        setup.main();
         susan_edges.main();
     }
 

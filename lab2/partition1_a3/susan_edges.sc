@@ -287,7 +287,7 @@ behavior SusanEdgesThread_PartB(uchar image_buffer[IMAGE_SIZE],  int r[IMAGE_SIZ
 
 };
 
-behavior  SusanEdges_ReadInput(i_uchar7220read_receiver in_image, uchar in_image_buffer[IMAGE_SIZE], int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])
+behavior  SusanEdges_ReadInput(i_uchar7220_receiver in_image, uchar in_image_buffer[IMAGE_SIZE], int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])
 {
     void main(void) {
         in_image.receive(&in_image_buffer);
@@ -346,7 +346,7 @@ behavior SusanEdges_PartB(uchar image_buffer[IMAGE_SIZE],  int r[IMAGE_SIZE], uc
     }
 };
 
-behavior SusanEdges(i_uchar7220read_receiver in_image, i_int7220_sender out_r, i_uchar7220_sender out_mid, uchar bp[516], i_uchar7220_sender out_image, OSAPI os)
+behavior SusanEdges(i_uchar7220_receiver in_image, i_int7220_sender out_r, i_uchar7220_sender out_mid, uchar bp[516], i_uchar7220_sender out_image, OSAPI os)
 {
 
     uchar image_buffer[IMAGE_SIZE];
