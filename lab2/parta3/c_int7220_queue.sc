@@ -64,7 +64,6 @@ extern void *memcpy(void*, const void*, unsigned int);
 //#include <i_typed_sender.sh>
 //#include <i_typed_receiver.sh>
 //#include <i_typed_tranceiver.sh>
-import "os1";
 
 #define DEFINE_C_TYPED_QUEUE(typename, type, OSAPI)			\
 									\
@@ -143,13 +142,13 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
 									\
     void send(type d)							\
     {	                                                                \
-	Task *t;							\
+	Task *t1;							\
 	while(n >= size)						\
 	{								\
 	    ws++;                                                       \
-	    t=os.pre_wait();						\
+	    t1=os.pre_wait();						\
 	    wait s;						        \
-	    os.post_wait(t);						\
+	    os.post_wait(t1);						\
 	    ws--;							\
 	}								\
 									\

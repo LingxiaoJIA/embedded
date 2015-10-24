@@ -10,6 +10,7 @@ import "detect_edges";
 import "susan_thin";
 import "edge_draw";
 import "os1";
+import "init";
      
 behavior TASK_PE1(i_uchar7220read_receiver in_image, i_uchar7220write_sender out_image, OSAPI os) implements Init
 {

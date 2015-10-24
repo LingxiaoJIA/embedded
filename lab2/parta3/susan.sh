@@ -24,7 +24,7 @@ typedef  unsigned char uchar;
 #define Y_SIZE 95
 #define IMAGE_SIZE 7220 /*(76*95)*/
 
-#define NR_IMGS       1
+#define NR_IMGS       5
 #define PROCESSORS 2
 #define BARRIER_NUM 2ul
 

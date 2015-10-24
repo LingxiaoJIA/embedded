@@ -20,6 +20,7 @@ behavior SetupBrightnessLutThread(uchar bp[516], in int thID, OSAPI os) implemen
         form = 6;
 
         os.task_activate(task);
+
         //for(k=-256;k<257;k++)
        for(k=(-256)+512/PROCESSORS*thID; k<(-256)+512/PROCESSORS*thID+512/PROCESSORS+1; k++){
             //waitfor(2700);  //insertion for the timing based on the performance profiling
@@ -54,6 +55,7 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
         setup_brightness_thread_1.init();
 
        task = os.par_start();	
+
         par {
             setup_brightness_thread_0;
             setup_brightness_thread_1;

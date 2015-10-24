@@ -36,6 +36,7 @@ behavior Edges(i_uchar7220read_receiver in_image,  i_int7220_sender out_r, i_uch
     
     void main(void) {
 	os.task_activate(task);
+
         fsm{
             detect_edges: {goto detect_edges;}
         	//detect_edges:{}

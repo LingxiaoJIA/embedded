@@ -206,8 +206,10 @@ channel OS implements OSAPI {
             RunPt->prev = RunPt->next = RunPt;
         } else {
             Insert(RunPt, currPt);
+	os_wait(currPt->id);
         }
         NumCreated++;
+
     }
 
     /* Event handling */
@@ -232,6 +234,7 @@ channel OS implements OSAPI {
 //print();
 //printf("current:%d Run:%d\n",currPt->id,RunPt->id);
             Insert(RunPt, currPt);
+	    os_wait(currPt->id);
         }
         NumCreated++;
 //print();

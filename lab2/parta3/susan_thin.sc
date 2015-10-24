@@ -218,7 +218,7 @@ void init(void){
                         }
                     }
                 } 
-
+//os.print();
 	os.time_wait(6400000);
 
 	//
@@ -232,7 +232,7 @@ void init(void){
     }//main                
 };
 
-behavior SusanThin_ReadInput(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])
+behavior SusanThin_ReadInput(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])//, OSAPI os)
 {
 
     void main(void) {
@@ -266,8 +266,9 @@ behavior SusanThin(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], OSAPI os)
 //	init();
 	susan_thin_thread_0.init(); //task(1)
 	susan_thin_thread_1.init(); //task(2)
-
+//os.print();
 	me=os.par_start();
+
        par {
             susan_thin_thread_0;
             susan_thin_thread_1;
@@ -286,7 +287,7 @@ behavior Thin(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, i_uchar7220_
     int r[IMAGE_SIZE];
     uchar mid[IMAGE_SIZE];
  
-    SusanThin_ReadInput susan_thin_read_input(in_r, in_mid, r, mid);
+    SusanThin_ReadInput susan_thin_read_input(in_r, in_mid, r, mid);//,os);
     SusanThin_WriteOutput susan_thin_write_output(out_mid, mid);   
     SusanThin susan_thin(r, mid, os);
     
@@ -299,7 +300,6 @@ behavior Thin(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, i_uchar7220_
     void main(void) {
 
 	os.task_activate(task);
-
         fsm {
             susan_thin_read_input: goto susan_thin;
             susan_thin: { goto susan_thin_write_output;}

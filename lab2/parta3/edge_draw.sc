@@ -40,7 +40,6 @@ behavior EdgeDrawThread_PartA(uchar image_buffer[7220], uchar mid[7220], in int 
                     *inp++=255; *inp++=255; *inp=255;
                 }
                 midp++;
-
 		os.time_wait(12000000);
 
             }

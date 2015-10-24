@@ -297,9 +297,7 @@ behavior  SusanEdges_ReadInput(i_uchar7220read_receiver in_image, uchar in_image
     }
 };
 
-behavior SusanEdges_WriteOutput(i_int7220_sender out_r, i_uchar7220_sender out_mid, 
-                                                            i_uchar7220_sender out_image, int r[IMAGE_SIZE], 
-                                                            uchar mid[IMAGE_SIZE], uchar out_image_buffer[IMAGE_SIZE])
+behavior SusanEdges_WriteOutput(i_int7220_sender out_r, i_uchar7220_sender out_mid, i_uchar7220_sender out_image, int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], uchar out_image_buffer[IMAGE_SIZE])
 {
 
     void main(void) {
