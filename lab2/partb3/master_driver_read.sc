@@ -18,11 +18,10 @@ channel MasterDriverRead(IMasterHardwareBus hardware_bus, OSAPI os)implements i_
     {
 	Task *task;
 	task=os.pre_wait();
+
 	hardware_bus.MasterSyncReceive0();
-
-//hardware_bus.print();
-
 	hardware_bus.MasterRead(addr, data, 7220);
+
 	os.post_wait(task);
     }
 };

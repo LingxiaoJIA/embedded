@@ -18,7 +18,6 @@ channel SlaveDriverWrite(ISlaveHardwareBus hardware_bus)implements i_slave_sende
     {
 	hardware_bus.SlaveSyncSend0();
 
-//hardware_bus.print();
 	hardware_bus.SlaveWrite(addr, data, 7220);
     }
 };
