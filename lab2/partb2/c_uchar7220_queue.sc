@@ -142,13 +142,13 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
 									\
     void send(type d)							\
     {	                                                                \
-	Task *t1;							\
+	Task *t;							\
 	while(n >= size)						\
 	{								\
 	    ws++;                                                       \
-	    t1=os.pre_wait();						\
+	    t=os.pre_wait();						\
 	    wait s;						        \
-	    os.post_wait(t1);						\
+	    os.post_wait(t);						\
 	    ws--;							\
 	}								\
 									\
@@ -177,7 +177,7 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
  *@param typename   user defined name for queue type
  *@param type       SpecC basic or composite type
  */
-#define DEFINE_IC_TYPED_QUEUE(typename, type, os)	                       \
+#define DEFINE_IC_TYPED_QUEUE(typename, type, os)	               \
                                                                        \
 DEFINE_I_TYPED_TRANCEIVER(typename, type)                              \
 DEFINE_I_TYPED_SENDER(typename, type)                                  \
@@ -188,10 +188,11 @@ DEFINE_C_TYPED_QUEUE(typename, type, os)
 
 
 
-typedef int  int7220[7220];
 
-DEFINE_I_TYPED_TRANCEIVER(int7220, int7220)
-DEFINE_I_TYPED_SENDER(int7220, int7220)
-DEFINE_I_TYPED_RECEIVER(int7220, int7220)
-DEFINE_C_TYPED_QUEUE(int7220, int7220, OSAPI)
+typedef unsigned char  uchar7220[7220];
+
+DEFINE_I_TYPED_TRANCEIVER(uchar7220, uchar7220)
+DEFINE_I_TYPED_SENDER(uchar7220, uchar7220)
+DEFINE_I_TYPED_RECEIVER(uchar7220, uchar7220)
+DEFINE_C_TYPED_QUEUE(uchar7220, uchar7220, OSAPI)
 

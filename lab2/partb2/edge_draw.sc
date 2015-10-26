@@ -6,6 +6,10 @@ import "init";
 
 import "c_uchar7220write_queue";
 
+
+import "HWBus";
+import "master_driver_write";
+
 behavior EdgeDrawThread_PartA(uchar image_buffer[7220], uchar mid[7220], in int thID, OSAPI os) implements Init
 {
 
@@ -39,6 +43,7 @@ behavior EdgeDrawThread_PartA(uchar image_buffer[7220], uchar mid[7220], in int 
                     *inp++=255; *inp++=255; *inp=255;
                 }
                 midp++;
+
                 os.time_wait(12000000);
             }
         }
@@ -91,10 +96,10 @@ behavior EdgeDraw_ReadInput(i_uchar7220_receiver in_image, i_uchar7220_receiver 
     }
 };
 
-behavior EdgeDraw_WriteOutput(uchar image_buffer[IMAGE_SIZE],  i_uchar7220write_sender out_image)
+behavior EdgeDraw_WriteOutput(uchar image_buffer[IMAGE_SIZE], i_master_sender master_driver_write)
 {
     void main(void) {
-        out_image.send(image_buffer);
+        master_driver_write.send(image_buffer);
     }
 };
 
@@ -136,7 +141,7 @@ behavior EdgeDraw_PartB(uchar image_buffer[7220], uchar mid[7220], OSAPI os)
     }
 };
 
-behavior EdgeDraw(i_uchar7220_receiver in_image, i_uchar7220_receiver in_mid,  i_uchar7220write_sender out_image, OSAPI os)
+behavior EdgeDraw(i_uchar7220_receiver in_image, i_uchar7220_receiver in_mid,  i_master_sender master_driver_write, OSAPI os)
 {
 
 
@@ -144,7 +149,7 @@ behavior EdgeDraw(i_uchar7220_receiver in_image, i_uchar7220_receiver in_mid,  i
     uchar mid[IMAGE_SIZE];
 
     EdgeDraw_ReadInput edge_draw_read_input(in_image, in_mid, image_buffer, mid);
-    EdgeDraw_WriteOutput edge_draw_write_output(image_buffer, out_image);
+    EdgeDraw_WriteOutput edge_draw_write_output(image_buffer, master_driver_write);
     EdgeDraw_PartA edge_draw_a(image_buffer, mid, os);
     EdgeDraw_PartB edge_draw_b(image_buffer, mid, os);
 
@@ -160,10 +165,10 @@ behavior EdgeDraw(i_uchar7220_receiver in_image, i_uchar7220_receiver in_mid,  i
     }
 };
 
-behavior Draw(i_uchar7220_receiver in_image, i_uchar7220_receiver in_mid,  i_uchar7220write_sender out_image, OSAPI os)  implements Init
+behavior Draw(i_uchar7220_receiver in_image, i_uchar7220_receiver in_mid, i_master_sender master_driver_write, OSAPI os)  implements Init
 {
     Task *task;
-    EdgeDraw edge_draw(in_image, in_mid,  out_image, os);
+    EdgeDraw edge_draw(in_image, in_mid, master_driver_write, os);
 
     void init(void){
         task = os.task_create("draw");

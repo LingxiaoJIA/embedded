@@ -1,7 +1,6 @@
 //#include <c_typed_queue.sh>	/* make the template available */
 //import "c_typed_queue.sh";
 
-import "os";
 
 #ifndef I_TYPED_SENDER_SH
 #define I_TYPED_SENDER_SH
@@ -65,9 +64,9 @@ extern void *memcpy(void*, const void*, unsigned int);
 //#include <i_typed_receiver.sh>
 //#include <i_typed_tranceiver.sh>
 
-#define DEFINE_C_TYPED_QUEUE(typename, type, OSAPI)			\
+#define DEFINE_C_TYPED_QUEUE(typename, type)			\
 									\
-channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
+channel c_ ## typename ## _queue(in const unsigned long size)	\
 	implements i_ ## typename ## _sender,				\
 		i_ ## typename ## _receiver,				\
 		i_ ## typename ## _tranceiver				\
@@ -112,13 +111,10 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
 									\
     void receive(type *d)						\
     {									\
-	Task *t;							\
 	while(! n)							\
 	{								\
 	    wr++;							\
-            t=os.pre_wait();						\
 	    wait r;							\
-	    os.post_wait(t);						\
 	    wr--;							\
 	}								\
 									\
@@ -142,13 +138,10 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
 									\
     void send(type d)							\
     {	                                                                \
-	Task *t1;							\
 	while(n >= size)						\
 	{								\
 	    ws++;                                                       \
-	    t1=os.pre_wait();						\
 	    wait s;						        \
-	    os.post_wait(t1);						\
 	    ws--;							\
 	}								\
 									\
@@ -177,21 +170,22 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
  *@param typename   user defined name for queue type
  *@param type       SpecC basic or composite type
  */
-#define DEFINE_IC_TYPED_QUEUE(typename, type, os)	                       \
+#define DEFINE_IC_TYPED_QUEUE(typename, type)	               \
                                                                        \
 DEFINE_I_TYPED_TRANCEIVER(typename, type)                              \
 DEFINE_I_TYPED_SENDER(typename, type)                                  \
 DEFINE_I_TYPED_RECEIVER(typename, type)                                \
-DEFINE_C_TYPED_QUEUE(typename, type, os)  
+DEFINE_C_TYPED_QUEUE(typename, type,)  
 
 #endif /* C_TYPED_QUEUE_SH */
 
 
 
-typedef int  int7220[7220];
 
-DEFINE_I_TYPED_TRANCEIVER(int7220, int7220)
-DEFINE_I_TYPED_SENDER(int7220, int7220)
-DEFINE_I_TYPED_RECEIVER(int7220, int7220)
-DEFINE_C_TYPED_QUEUE(int7220, int7220, OSAPI)
+typedef unsigned char  uchar7220ORG[7220];
+
+DEFINE_I_TYPED_TRANCEIVER(uchar7220ORG, uchar7220ORG)
+DEFINE_I_TYPED_SENDER(uchar7220ORG, uchar7220ORG)
+DEFINE_I_TYPED_RECEIVER(uchar7220ORG, uchar7220ORG)
+DEFINE_C_TYPED_QUEUE(uchar7220ORG, uchar7220ORG)
 

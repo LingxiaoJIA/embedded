@@ -142,13 +142,13 @@ channel c_ ## typename ## _queue(in const unsigned long size, OSAPI os)	\
 									\
     void send(type d)							\
     {	                                                                \
-	Task *t1;							\
+	Task *t;							\
 	while(n >= size)						\
 	{								\
 	    ws++;                                                       \
-	    t1=os.pre_wait();						\
+	    t=os.pre_wait();						\
 	    wait s;						        \
-	    os.post_wait(t1);						\
+	    os.post_wait(t);						\
 	    ws--;							\
 	}								\
 									\

@@ -201,7 +201,7 @@ behavior SusanThinThread(int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE], in int thID)
     }                
 };
 
-behavior SusanThin_ReadInput(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])
+behavior SusanThin_ReadInput(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, int r[IMAGE_SIZE], uchar mid[IMAGE_SIZE])//, OSAPI os)
 {
 
     void main(void) {
@@ -238,7 +238,7 @@ behavior Thin(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, i_uchar7220_
     int r[IMAGE_SIZE];
     uchar mid[IMAGE_SIZE];
  
-    SusanThin_ReadInput susan_thin_read_input(in_r, in_mid, r, mid);
+    SusanThin_ReadInput susan_thin_read_input(in_r, in_mid, r, mid);//,os);
     SusanThin_WriteOutput susan_thin_write_output(out_mid, mid);   
     SusanThin susan_thin(r, mid);
     
@@ -249,7 +249,6 @@ behavior Thin(i_int7220_receiver in_r, i_uchar7220_receiver in_mid, i_uchar7220_
             susan_thin_write_output: goto susan_thin_read_input;
         }
     }
-    
 };
 
 
