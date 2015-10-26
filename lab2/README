@@ -1,0 +1,5 @@
+Partition1 1, 2, 3 are located at part1a1, part1a2, part1a3, respectively
+Partition2 1, 2 are located at part2a1, part2a2, respectively
+The commands of MAKEFILE:
+% make   //To compile all files
+% make test  //Run susan_edge_detector.sc and compare results with golden reference.  

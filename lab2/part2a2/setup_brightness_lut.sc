@@ -20,6 +20,7 @@ behavior SetupBrightnessLutThread(uchar bp[516], in int thID, OSAPI os) implemen
         form = 6;
 
         os.task_activate(task);
+
         //for(k=-256;k<257;k++)
        for(k=(-256)+512/PROCESSORS*thID; k<(-256)+512/PROCESSORS*thID+512/PROCESSORS+1; k++) {
             temp=((float)k)/((float)thresh);
