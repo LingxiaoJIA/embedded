@@ -13,10 +13,10 @@ behavior DetectEdges(i_uchar7220read_receiver in_image, i_int7220_sender out_r, 
 {
 
     uchar bp[516];
-    c_uchar7220_queue image_mid(1ul, os);
+    uchar image_buffer[IMAGE_SIZE];
 
-    SetupBright setup(in_image, image_mid, bp, os);
-    SusanEdges susan_edges(image_mid, out_r, out_mid, bp, out_image, os);
+    SetupBright setup(in_image, image_buffer, bp, os);
+    SusanEdges susan_edges(image_buffer, out_r, out_mid, bp, out_image, os);
 
     void main(void) {
         setup.main();

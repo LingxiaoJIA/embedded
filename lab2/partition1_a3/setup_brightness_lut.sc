@@ -46,14 +46,6 @@ behavior SetupBrightnessLut_ReadInput(i_uchar7220read_receiver in_image, uchar i
     }
 };
 
-behavior SetupBrightnessLut_WriteOutput(i_uchar7220_sender out_image, uchar out_image_buffer[IMAGE_SIZE])
-{
-
-    void main(void) {
-        out_image.send(out_image_buffer);
-    }
-};
-
 behavior SetupBrightnessLut(uchar bp[516], OSAPI os)
 {
     Task *task;
@@ -74,19 +66,15 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os)
     }
 };
 
-behavior SetupBright(i_uchar7220read_receiver in_image, i_uchar7220_sender out_image, uchar bp[516], OSAPI os)
+behavior SetupBright(i_uchar7220read_receiver in_image, uchar image_buffer[IMAGE_SIZE], uchar bp[516], OSAPI os)
 {
-    uchar image_buffer[IMAGE_SIZE];
-
     SetupBrightnessLut_ReadInput setup_read_input(in_image, image_buffer);
-    SetupBrightnessLut_WriteOutput setup_write_output(out_image, image_buffer);
     SetupBrightnessLut setup(bp, os);
 
     void main(void) {
         fsm {
             setup_read_input: goto setup;
-            setup: goto setup_write_output;
-            setup_write_output: {}
+            setup: {}
         }
     }
 };
