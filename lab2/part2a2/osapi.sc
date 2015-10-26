@@ -30,8 +30,8 @@ interface OSAPI
     void par_end(Task *t);
 
     /* Event handling */
-    Task pre_wait();
-    void post_wait(Task t);
+    Task* pre_wait();
+    void post_wait(Task *t);
 
     /* Time modeling */
     void time_wait(sim_time nsec);

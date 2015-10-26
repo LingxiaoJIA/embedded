@@ -50,13 +50,10 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
 
     void main(void) {
 
-        printf("# of threads: %d\n", os.getNumCreated());
         init();
-        printf("# of threads: %d\n", os.getNumCreated());
 
         setup_brightness_thread_0.init();
         setup_brightness_thread_1.init();
-        printf("# of threads: %d\n", os.getNumCreated());
 
         task = os.par_start();
         par {
@@ -64,9 +61,7 @@ behavior SetupBrightnessLut(uchar bp[516], OSAPI os) implements Init
             setup_brightness_thread_1;
         }
         os.par_end(task);
-        printf("# of threads: %d\n", os.getNumCreated());
         os.task_terminate();
-        printf("# of threads: %d\n", os.getNumCreated());
     }
 
 };

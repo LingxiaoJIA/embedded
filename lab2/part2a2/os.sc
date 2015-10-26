@@ -129,6 +129,7 @@ channel OS implements OSAPI {
         } else {
             Insert(RunPt, currPt);
         }
+        NextPt = RunPt->next;
         return currPt;
     }
 
@@ -164,23 +165,32 @@ channel OS implements OSAPI {
             RunPt->prev = RunPt->next = RunPt;
         } else {
             Insert(RunPt, currPt);
+            os_wait(currPt->id);
         }
         NumCreated++;
     }
 
     /* Event handling */
-    Task pre_wait() {
-        Task t;
-        dispatch();
-        return t;
+    Task* pre_wait() {
+        Task *currPt;
+        currPt = RunPt;
+        Remove(&RunPt);
+        if (currPt) {
+            NumCreated--;
+        }
+        if (RunPt) dispatch();
+        return currPt;
     }
 
-    void post_wait(Task t) {
-    /*
-        rdyq.insert(t);
-        if (!current) dispatch();
-        wait(t.event);
-    */
+    void post_wait(Task *currPt) {
+        if (RunPt == 0) {
+            RunPt = currPt;
+            RunPt->prev = RunPt->next = RunPt;
+        } else {
+            Insert(RunPt, currPt);
+            os_wait(currPt->id);
+        }
+        NumCreated++;
     }
 
     /* Time modeling */
@@ -189,4 +199,5 @@ channel OS implements OSAPI {
         yield();
     }
 };
+
 
